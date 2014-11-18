@@ -266,13 +266,16 @@ function initGame(canvasElement, moveCountElement) {
     if (!canvasElement) {
         canvasElement = document.createElement("canvas");
 	    canvasElement.id = "chess_canvas";
-	    document.body.appendChild(canvasElement);
+	    $('#boardContainer').prepend(canvasElement);
         $('#chess_canvas').css({"margin-left":"auto", "margin-right":"auto", "display":"block","text-align":"center"});
+        var ename = document.createElement("p");
+        ename.id = "ename";
+        $('#boardContainer').prepend(ename);
+        $('p#ename').css({"margin-left":"auto", "margin-right":"auto", "text-align":"center"});
+        $('p#ename').text("TBGeorge");
+
     }
-    if (!moveCountElement) {
-        moveCountElement = document.createElement("p");
-	    document.body.appendChild(moveCountElement);
-    }
+
     gCanvasElement = canvasElement;
     gCanvasElement.width = kPixelWidth;
     gCanvasElement.height = kPixelHeight;

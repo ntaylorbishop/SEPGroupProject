@@ -6,11 +6,26 @@
 	<TITLE>Chess</TITLE>
 	<SCRIPT SRC="js/jquery.js"></SCRIPT>
 	<SCRIPT SRC="js/main.js"></SCRIPT>
+	<LINK REL="stylesheet" TYPE="text/css" HREF="css/style.css">
 </HEAD>
 <BODY>
-	<H1>Canvas Halma</H1>
-	<P>(<A HREF=canvas.html#halma>Rules of play</A>)</P>
-	<P ID="moves">Moves: <SPAN ID="movecount">0</SPAN></p>
+	<DIV ID="head">
+		<DIV ID="uname">Allegorithmic</DIV>
+	</DIV>
+	<DIV ID="container">
+		<DIV ID="boardContainer">
+			<BUTTON ID="reset" TYPE="button">Reset</BUTTON>
+			<BUTTON ID="send" TYPE="button">Send</BUTTON>
+			<br/><br/>
+			<P ID="uname">Allegorithmic</P>
+			<DIV ID="endBtn"><BUTTON ID="end" TYPE="button">Forfeit</BUTTON></DIV>
+		</DIV>
+		<DIV ID="eChessClock">12:00</DIV>
+		<DIV ID="uChessClock">11:45 &#x25c0</DIV>
+
+	</DIV>
+		
+	</DIV>
 	<SCRIPT>
   		initGame(null, document.getElementById('movecount'));
 	</SCRIPT>

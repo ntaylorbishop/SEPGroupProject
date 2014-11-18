@@ -1,0 +1,65 @@
+body {
+	margin: 0%;
+}
+
+div#head {
+	height: 30px;
+	width: 100%;
+	background-color: #727272;
+	margin-bottom: 50px;
+	color: white;
+	font-family: Arial, Helvetica, sans-serif;
+}
+div#uname {
+	vertical-align: middle;
+	margin-right: 30px;
+	margin-top: 5px;
+	float: right;
+}
+
+div#boardContainer {
+	width: 481px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+button#reset {
+	margin-top: 5px;
+	float:left;
+}
+button#send {
+	margin-top: 5px;
+	float: right;
+}
+div#endBtn {
+	width: 53px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+p#ename, p#uname {
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: bold;
+	font-size: 1.2em;
+	margin-right: auto;
+	margin-left: auto;
+	text-align: center;
+}
+
+div#container {
+	position: relative;
+}
+div#eChessClock {
+	position: absolute;
+	right: 400px;
+	top: 50px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 1.3em;
+}
+div#uChessClock {
+	position:absolute;
+	right: 400px;
+	top: 480px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 1.3em;
+}
