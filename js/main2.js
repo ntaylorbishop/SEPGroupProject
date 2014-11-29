@@ -12,8 +12,8 @@ var gPattern;
 
 var gPieces;
 
-var oPieces;
-var yPieces;
+var blackPieces;
+var whitePieces;
 
 var gNumPieces;
 var gSelectedPieceIndex;
@@ -22,7 +22,7 @@ var gMoveCount;
 var gMoveCountElem;
 var gGameInProgress;
 
-function Cell(column, row) {
+function Cell(row, column) {
     this.row = row;
     this.column = column;
 }
@@ -43,7 +43,7 @@ function getCursorPosition(e) {
     y -= gCanvasElement.offsetTop;
     x = Math.min(x, kBoardWidth * kPieceWidth);
     y = Math.min(y, kBoardHeight * kPieceHeight);
-    var cell = new Cell(Math.floor(x/kPieceWidth), Math.floor(y/kPieceHeight) -1);
+    var cell = new Cell(Math.floor(y/kPieceHeight) -1, Math.floor(x/kPieceWidth));
     return cell;
 }
 
@@ -108,13 +108,9 @@ function drawBoard(cell) {
         }
     }
 
-    //Draw opponent pieces
-    for (var i = 0; i < oPieces; i++)
-	   drawPiece(oPieces[i], i == gSelectedPieceIndex);
-
-    //Draw player pieces
-    for (var i = 0; i < yPieces; i++)
-        drawPiece(yPieces[i], i == gSelectedPieceIndex);
+    //Draw pieces
+    for (var i = 0; i < 32; i++)
+	   drawPiece(gPieces[i], i == gSelectedPieceIndex);
 }
 
 function drawPiece(p, selected) {
@@ -210,19 +206,8 @@ function newGame() {
                new Cell(1, 6),
                new Cell(1, 7)];
 
-    oPieces = [new Cell(0, 0), new Cell(1, 0), new Cell(2, 0), new Cell(3, 0), 
-               new Cell(4, 0), new Cell(5, 0), new Cell(6, 0), new Cell(7, 0), 
 
-               new Cell(0, 1), new Cell(1, 1), new Cell(2, 1), new Cell(3, 1),
-               new Cell(4, 1), new Cell(5, 1), new Cell(6, 1), new Cell(7, 1)];
 
-    h = kBoardHeight;
-
-    yPieces = [new Cell(0, h - 1), new Cell(1, h - 1), new Cell(2, h - 1), new Cell(3, h - 1),
-               new Cell(4, h - 1), new Cell(5, h - 1), new Cell(6, h - 1), new Cell(7, h - 1),
-
-               new Cell(0, h - 2), new Cell(1, h - 2), new Cell(2, h - 2), new Cell(3, h - 2),
-               new Cell(4, h - 2), new Cell(5, h - 2), new Cell(6, h - 2), new Cell(7, h - 2)];
 
     gNumPieces = gPieces.length;
     gSelectedPieceIndex = -1;
