@@ -1,5 +1,7 @@
 body {
 	margin: 0%;
+	background-image: url(/background.png);
+
 }
 
 div#head {
@@ -62,4 +64,89 @@ div#uChessClock {
 	top: 480px;
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 1.3em;
+}
+
+
+
+
+
+/* for Game.html Page */ 
+
+
+div.wrapper{
+	font-family:monospace;
+	width: 100%;
+	height: 100%;
+	position: relative;
+}
+
+
+header{
+	height: 30px;
+	width: 100%;
+	background-color: #727272;
+	margin-bottom: 50px;
+	color: white;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+.userPass{
+	width: 460;
+	float: right;
+	margin-top: 3px;
+}
+
+.mainBody{
+
+	height: 85%;
+	width: 70%;
+	margin: 0 auto;
+
+}
+
+.titleHere{
+	width: 400px;
+	margin: 0 auto;
+	text-align: center;
+	margin-bottom: 40px;
+}
+
+div.lobby{
+
+float: left;
+margin-bottom: 25px;
+width: 170px;
+border-radius: 25px;
+height: 60px;
+padding-top: 35px;
+text-align: center;
+font-size: 22px;
+margin-left: 50px;
+border: 1px solid green;
+
+
+
+}
+
+
+.buttonToCreateGame{
+	clear: both;
+	height: 50px;
+	width: 100%;
+	position: relative;
+	margin-top: 60px;
+
+}
+
+
+.createButton{
+
+width: 170px;
+border-radius: 20px;
+height: 40px;
+padding-top: 25px;
+text-align: center;
+font-size: 18px;
+background-color: green;
+margin: 0 auto;
 }
