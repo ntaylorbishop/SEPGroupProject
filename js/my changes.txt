@@ -1,0 +1,4 @@
+line 3 and 4
+
+var kPieceWidth = 70;
+var kPieceHeight= 80;
