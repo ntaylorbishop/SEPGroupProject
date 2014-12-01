@@ -1,8 +1,8 @@
 <?php
 require 'db_conn.php';
 $json = file_get_contents("php://input");
-$username = json_decode($json);
-$username = $username->username;
+$user = json_decode($json);
+$username = $user->username;
 
 $sql = "SELECT * FROM Users WHERE username=:username";
 try {
@@ -11,7 +11,7 @@ try {
     $stmt->bindParam("username", $username);
     $stmt->execute();
     if ($stmt->rowCount() == 1) {
-        $sqlUser = "UPDATE Users SET waitingToConnect = 1 WHERE username = :username";
+        $sqlUser = "INSERT INTO Whos_Playing VALUES(:username, 0, 0)";
         $stmt = $db->prepare($sqlUser);
         $stmt->bindParam("username", $username);
         $stmt->execute();
@@ -22,6 +22,6 @@ try {
 
     $db = null;
 } catch (PDOException $e) {
-    echo '{"error":true}';
+    echo '{"error":"' . $e->getMessage() . '"}';
 }
 ?>
