@@ -20,5 +20,4 @@ try {
 } catch (PDOException $e) {
     echo '{"error":{ true}';
 }
-
 ?>
