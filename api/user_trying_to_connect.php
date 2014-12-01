@@ -4,14 +4,14 @@ $json = file_get_contents("php://input");
 $username = json_decode($json);
 $username = $username['username'];
 
-$sql = "SELECT * FROM Users WHERE username=" . $username;
+$sql = "SELECT * FROM Users WHERE username=:username";
 try {
     $db = dbconnect();
     $stmt = $db->prepare($sql);
     $stmt->bindParam("username", $username);
     $stmt->execute();
     if ($stmt->rowCount() == 1) {
-        echo '{"error": true}';
+        echo '{"error": false}';
     } else {
     	$sqlUser = "INSERT INTO Users VALUES(" . $username . ")";
         echo '{"error": false}';
