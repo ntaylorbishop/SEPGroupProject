@@ -57,6 +57,14 @@ function clickOnCell(e) {
     	}
     }
 
+    for(var i = 0; i < oPieces.length; i++) {
+        if ((oPieces[i].row == cell.row) && (oPieces[i].column == cell.column)) {
+            gSelectedPieceIndex = i;
+            drawBoard(cell);
+            return;
+        }
+    }
+
     gPieces[gSelectedPieceIndex].row = cell.row;
     gPieces[gSelectedPieceIndex].column = cell.column;
     drawBoard(new Cell(-1, -1));
@@ -77,8 +85,7 @@ function isThereAPieceBetween(cell1, cell2) {
     var rowBetween = (cell1.row + cell2.row) / 2;
     var columnBetween = (cell1.column + cell2.column) / 2;
     for (var i = 0; i < gNumPieces; i++) {
-    	if ((gPieces[i].row == rowBetween) &&
-    	    (gPieces[i].column == columnBetween)) {
+    	if ((gPieces[i].row == rowBetween) && (gPieces[i].column == columnBetween)) {
     	    return true;
     	}
     }
@@ -109,11 +116,11 @@ function drawBoard(cell) {
     }
 
     //Draw opponent pieces
-    for (var i = 0; i < oPieces; i++)
+    for (var i = 0; i < oPieces.length; i++)
 	   drawPiece(oPieces[i], i == gSelectedPieceIndex);
 
     //Draw player pieces
-    for (var i = 0; i < yPieces; i++)
+    for (var i = 0; i < yPieces.length; i++)
         drawPiece(yPieces[i], i == gSelectedPieceIndex);
 }
 
