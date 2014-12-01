@@ -1,25 +1,27 @@
-
 var kBoardWidth = 8;
 var kBoardHeight= 8;
 var kPieceWidth = 60;
 var kPieceHeight= 60;
 var kPixelWidth = 1 + (kBoardWidth * kPieceWidth);
 var kPixelHeight= 1 + (kBoardHeight * kPieceHeight);
+var xOffset;
+var yOffset;
 
 var gCanvasElement;
 var gDrawingContext;
 var gPattern;
 
-var gPieces;
-
 var oPieces;
-var yPieces;
+var oColor = 'B';
+var oNumPieces;
 
-var gNumPieces;
-var gSelectedPieceIndex;
-var gSelectedPieceHasMoved;
-var gMoveCount;
-var gMoveCountElem;
+var yPieces;
+var yMovedPieces = new Array();
+var yColor = 'W';
+var yNumPieces;
+var selectedPieceIndex;
+var selectedPieceHasMoved;
+
 var gGameInProgress;
 
 function Cell(column, row) {
@@ -27,72 +29,82 @@ function Cell(column, row) {
     this.column = column;
 }
 
+function Piece(column, row, pieceType) {
+    this.row = row;
+    this.column = column;
+    this.pieceType = pieceType;
+}
+
 function getCursorPosition(e) {
     /* returns Cell with .row and .column properties */
     var x;
     var y;
     if (e.pageX != undefined && e.pageY != undefined) {
-    	x = e.pageX;
-    	y = e.pageY;
+        x = e.pageX;
+        y = e.pageY;
     }
+
     else {
-    	x = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
-    	y = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+        x = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+        y = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
     }
     x -= gCanvasElement.offsetLeft;
-    y -= gCanvasElement.offsetTop;
+    y -= gCanvasElement.offsetTop + 80;
     x = Math.min(x, kBoardWidth * kPieceWidth);
     y = Math.min(y, kBoardHeight * kPieceHeight);
-    var cell = new Cell(Math.floor(x/kPieceWidth), Math.floor(y/kPieceHeight) -1);
+    var cell = new Cell(Math.floor(x/kPieceWidth), Math.floor(y/kPieceHeight));
     return cell;
 }
 
 function clickOnCell(e) {
+    if(selectedPieceHasMoved) { return; }
     var cell = getCursorPosition(e);
-    for (var i = 0; i < gNumPieces; i++) {
-    	if ((gPieces[i].row == cell.row) && (gPieces[i].column == cell.column)) {
-            gSelectedPieceIndex = i;
-    	    drawBoard(cell);
+    // alert(cell.column + ", " + cell.row);
+    for (var i = 0; i < yNumPieces; i++) {
+    	if ((yPieces[i].row == cell.row) && (yPieces[i].column == cell.column)) {
+            selectedPieceIndex = i;
+    	    drawBoard();
     	    return;
     	}
     }
 
-    for(var i = 0; i < oPieces.length; i++) {
-        if ((oPieces[i].row == cell.row) && (oPieces[i].column == cell.column)) {
-            gSelectedPieceIndex = i;
-            drawBoard(cell);
-            return;
+    clickOnEmptyCell(cell);
+}
+
+function clickOnEmptyCell(cell) {
+    if(selectedPieceIndex == -1) { return; }
+    if(selectedPieceHasMoved) { return; }
+    var piece = yPieces[selectedPieceIndex];
+    var validMove = false;
+    if(piece.pieceType == 'P')
+        validMove = checkValidPawnMove(piece, cell);
+    else if(piece.pieceType == 'R') 
+        validMove = checkValidRookMove(piece, cell);
+    else if(piece.pieceType == 'K') 
+        validMove = checkValidKingMove(piece, cell);
+    else if(piece.pieceType == 'Q') 
+        validMove = checkValidQueenMove(piece, cell);
+    else if(piece.pieceType == 'B') 
+        validMove = checkValidBishopMove(piece, cell);
+    else if(piece.pieceType == 'N') 
+        validMove = checkValidKnightMove(piece, cell);
+
+    alert(validMove);
+    if(validMove) {
+        selectedPieceHasMoved = true;
+        for(var i = 0; i < yPieces.length; i++) {
+            yMovedPieces.push(new Piece(yPieces[i].column, yPieces[i].row, yPieces[i].pieceType));
         }
+        yMovedPieces[selectedPieceIndex].row = cell.row;
+        yMovedPieces[selectedPieceIndex].column = cell.column;
+        drawBoard();
     }
-
-    gPieces[gSelectedPieceIndex].row = cell.row;
-    gPieces[gSelectedPieceIndex].column = cell.column;
-    drawBoard(new Cell(-1, -1));
 }
 
-function getPieceFromCell(cell) {
-    xPos = cell.column;
-    yPos = cell.row;
-}
+function drawBoard() {
+    xOffset -= gCanvasElement.offsetLeft;
+    yOffset -= gCanvasElement.offsetTop + 80;
 
-function clickOnPiece(i, cell) {
-    drawBoard(cell);
-}
-
-function isThereAPieceBetween(cell1, cell2) {
-    /* note: assumes cell1 and cell2 are 2 squares away
-       either vertically, horizontally, or diagonally */
-    var rowBetween = (cell1.row + cell2.row) / 2;
-    var columnBetween = (cell1.column + cell2.column) / 2;
-    for (var i = 0; i < gNumPieces; i++) {
-    	if ((gPieces[i].row == rowBetween) && (gPieces[i].column == columnBetween)) {
-    	    return true;
-    	}
-    }
-    return false;
-}
-
-function drawBoard(cell) {
     gDrawingContext.clearRect(0, 0, kPixelWidth, kPixelHeight);
     gDrawingContext.beginPath();
 
@@ -107,68 +119,72 @@ function drawBoard(cell) {
                 gDrawingContext.fillStyle="#B58863"; 
                 gDrawingContext.fillRect(x*kPieceWidth,y*kPieceHeight,kPieceWidth,kPieceHeight);
             }
-            if(cell.row == y && cell.column == x) {
-                gDrawingContext.strokeStyle = "#fffc00";
-                gDrawingContext.lineWidth = 6;
-                gDrawingContext.strokeRect(x*kPieceWidth + 3, y*kPieceHeight + 3, kPieceWidth - 3, kPieceHeight - 3);
-            }
         }
     }
 
+
     //Draw opponent pieces
     for (var i = 0; i < oPieces.length; i++)
-	   drawPiece(oPieces[i], i == gSelectedPieceIndex);
+	   drawPiece(oPieces[i], false, oColor);
 
     //Draw player pieces
-    for (var i = 0; i < yPieces.length; i++)
-        drawPiece(yPieces[i], i == gSelectedPieceIndex);
+    if (selectedPieceHasMoved) {
+        for (var i = 0; i < yMovedPieces.length; i++)
+            drawPiece(yMovedPieces[i], i == selectedPieceIndex, yColor);
+    }
+    else if(!selectedPieceHasMoved) {
+        for (var i = 0; i < yPieces.length; i++)
+            drawPiece(yPieces[i], i == selectedPieceIndex, yColor);
+    }
 }
 
-function drawPiece(p, selected) {
+function drawPiece(p, selected, color) {
     var column = p.column;
     var row = p.row;
     var x = (column * kPieceWidth) + 5;
     var y = (row * kPieceHeight) + 5;
+
+    if(selected) {
+        gDrawingContext.beginPath();
+        gDrawingContext.rect(x - 5, y - 5, kPieceWidth, kPieceHeight)
+        gDrawingContext.closePath();
+        if(!selectedPieceHasMoved)
+            gDrawingContext.fillStyle="#ffea00"; 
+        else 
+            gDrawingContext.fillStyle="#0000ff";
+        gDrawingContext.fill();
+    }
 
     var imageObj = new Image();
     imageObj.onload = function() {
         gDrawingContext.drawImage(imageObj, x, y, 50, 50);
     };
 
-    if(row == kBoardHeight - 2 || row == kBoardHeight - 3)
+    if (p.pieceType == 'P' && color == 'B')
         imageObj.src = 'img/chesspieces/bP.png';
-    else if(row == 1)
+    else if (p.pieceType == 'P' && color == 'W')
         imageObj.src = 'img/chesspieces/wP.png';
-    if(row == 0) {
-        if(column == 0) imageObj.src = 'img/chesspieces/wR.png';
-        if(column == 1) imageObj.src = 'img/chesspieces/wN.png';
-        if(column == 2) imageObj.src = 'img/chesspieces/wB.png';
-        if(column == 3) imageObj.src = 'img/chesspieces/wQ.png';
-        if(column == 4) imageObj.src = 'img/chesspieces/wK.png';
-        if(column == 5) imageObj.src = 'img/chesspieces/wB.png';
-        if(column == 6) imageObj.src = 'img/chesspieces/wN.png';
-        if(column == 7) imageObj.src = 'img/chesspieces/wR.png';
-    }
-    if(row == kBoardHeight - 1) {
-        if(column == 0) imageObj.src = 'img/chesspieces/bR.png';
-        if(column == 1) imageObj.src = 'img/chesspieces/bN.png';
-        if(column == 2) imageObj.src = 'img/chesspieces/bB.png';
-        if(column == 3) imageObj.src = 'img/chesspieces/bK.png';
-        if(column == 4) imageObj.src = 'img/chesspieces/bQ.png';
-        if(column == 5) imageObj.src = 'img/chesspieces/bB.png';
-        if(column == 6) imageObj.src = 'img/chesspieces/bN.png';
-        if(column == 7) imageObj.src = 'img/chesspieces/bR.png';
-    }
+    if (p.pieceType == 'Q' && color == 'B')
+        imageObj.src = 'img/chesspieces/bQ.png';
+    else if (p.pieceType == 'Q' && color =='W')
+        imageObj.src = 'img/chesspieces/wQ.png';
+    if (p.pieceType == 'K' && color == 'B')
+        imageObj.src = 'img/chesspieces/bK.png';
+    else if (p.pieceType == 'K' && color == 'W')
+        imageObj.src = 'img/chesspieces/wK.png';
+    if (p.pieceType == 'R' && color == 'B')
+        imageObj.src = 'img/chesspieces/bR.png';
+    else if (p.pieceType == 'R' && color == 'W')
+        imageObj.src = 'img/chesspieces/wR.png';
+    if (p.pieceType == 'B' && color == 'B')
+        imageObj.src = 'img/chesspieces/bB.png';
+    else if (p.pieceType == 'B' && color == 'W')
+        imageObj.src = 'img/chesspieces/wB.png';
+    if (p.pieceType == 'N' && color == 'B')
+        imageObj.src = 'img/chesspieces/bN.png';
+    else if (p.pieceType == 'N' && color == 'W')
+        imageObj.src = 'img/chesspieces/wN.png';
 
-    if( x >= 325 && y <= 125) {
-       gDrawingContext.fillStyle = "#00FF00";
-       gDrawingContext.fill();
-    }
-
-    if (selected) {
-	   gDrawingContext.fillStyle = "#000";
-	   gDrawingContext.fill();
-    }
 }
 
 if (typeof resumeGame != "function") {
@@ -181,70 +197,34 @@ if (typeof resumeGame != "function") {
 }
 
 function newGame() {
-    gPieces = [new Cell(kBoardHeight - 1, 0),
-	           new Cell(kBoardHeight - 1, 1),
-	           new Cell(kBoardHeight - 1, 2),
-	           new Cell(kBoardHeight - 1, 3),
-	           new Cell(kBoardHeight - 1, 4),
-	           new Cell(kBoardHeight - 1, 5),
-	           new Cell(kBoardHeight - 1, 6),
-	           new Cell(kBoardHeight - 1, 7),
+    oPieces = [new Piece(0, 0, 'R'), new Piece(1, 0, 'N'), new Piece(2, 0, 'B'), new Piece(3, 0, 'K'), 
+               new Piece(4, 0, 'Q'), new Piece(5, 0, 'B'), new Piece(6, 0, 'N'), new Piece(7, 0, 'R'), 
 
-               new Cell(kBoardHeight - 2, 0),
-               new Cell(kBoardHeight - 2, 1),
-               new Cell(kBoardHeight - 2, 2),
-               new Cell(kBoardHeight - 2, 3),
-               new Cell(kBoardHeight - 2, 4),
-               new Cell(kBoardHeight - 2, 5),
-               new Cell(kBoardHeight - 2, 6),
-               new Cell(kBoardHeight - 2, 7),
-
-               new Cell(0, 0),
-               new Cell(0, 1),
-               new Cell(0, 2),
-               new Cell(0, 3),
-               new Cell(0, 4),
-               new Cell(0, 5),
-               new Cell(0, 6),
-               new Cell(0, 7),
-
-               new Cell(1, 0),
-               new Cell(1, 1),
-               new Cell(1, 2),
-               new Cell(1, 3),
-               new Cell(1, 4),
-               new Cell(1, 5),
-               new Cell(1, 6),
-               new Cell(1, 7)];
-
-    oPieces = [new Cell(0, 0), new Cell(1, 0), new Cell(2, 0), new Cell(3, 0), 
-               new Cell(4, 0), new Cell(5, 0), new Cell(6, 0), new Cell(7, 0), 
-
-               new Cell(0, 1), new Cell(1, 1), new Cell(2, 1), new Cell(3, 1),
-               new Cell(4, 1), new Cell(5, 1), new Cell(6, 1), new Cell(7, 1)];
+               new Piece(0, 1, 'P'), new Piece(1, 1, 'P'), new Piece(2, 1, 'P'), new Piece(3, 1, 'P'),
+               new Piece(4, 1, 'P'), new Piece(5, 1, 'P'), new Piece(6, 1, 'P'), new Piece(7, 1, 'P')];
 
     h = kBoardHeight;
+    oNumPieces = 16;
 
-    yPieces = [new Cell(0, h - 1), new Cell(1, h - 1), new Cell(2, h - 1), new Cell(3, h - 1),
-               new Cell(4, h - 1), new Cell(5, h - 1), new Cell(6, h - 1), new Cell(7, h - 1),
+    yPieces = [new Piece(0, h - 1, 'R'), new Piece(1, h - 1, 'N'), new Piece(2, h - 1, 'B'), new Piece(3, h - 1, 'Q'),
+               new Piece(4, h - 1, 'K'), new Piece(5, h - 1, 'B'), new Piece(6, h - 1, 'N'), new Piece(7, h - 1, 'R'),
 
-               new Cell(0, h - 2), new Cell(1, h - 2), new Cell(2, h - 2), new Cell(3, h - 2),
-               new Cell(4, h - 2), new Cell(5, h - 2), new Cell(6, h - 2), new Cell(7, h - 2)];
+               new Piece(0, h - 2, 'P'), new Piece(1, h - 2, 'P'), new Piece(2, h - 2, 'P'), new Piece(3, h - 2, 'P'),
+               new Piece(4, h - 2, 'P'), new Piece(5, h - 2, 'P'), new Piece(6, h - 2, 'P'), new Piece(7, h - 2, 'P')];
 
-    gNumPieces = gPieces.length;
-    gSelectedPieceIndex = -1;
-    gSelectedPieceHasMoved = false;
-    gMoveCount = 0;
+    yNumPieces = 16;
+    selectedPieceIndex = -1;
+    selectedPieceHasMoved = false;
     gGameInProgress = true;
-    drawBoard(new Cell(-1, -1));
+    drawBoard();
 }
 
 function endGame() {
-    gSelectedPieceIndex = -1;
+    selectedPieceIndex = -1;
     gGameInProgress = false;
 }
 
-function initGame(canvasElement, moveCountElement) {
+function initGame(canvasElement) {
     if (!canvasElement) {
         canvasElement = document.createElement("canvas");
 	    canvasElement.id = "chess_canvas";
@@ -262,8 +242,119 @@ function initGame(canvasElement, moveCountElement) {
     gCanvasElement.width = kPixelWidth;
     gCanvasElement.height = kPixelHeight;
     gCanvasElement.addEventListener("click", clickOnCell, false);
-    gMoveCountElem = moveCountElement;
     gDrawingContext = gCanvasElement.getContext("2d");
-    if (!resumeGame())
-	    newGame();
+	newGame();
+}
+
+function isMyPieceAt(x, y) {
+    for(var i = 0; i < yNumPieces.length; i++) {
+        if(yPieces[i].column == x && yPieces[i].row == y)
+            return true;
+    }
+    return false;
+}
+
+function checkValidPawnMove(piece, dest) {
+    if(piece.row == dest.row) 
+        return false;
+
+    //check move
+    var firstMove = (piece.row == 6);
+    if(firstMove) {
+        if(piece.row - dest.row <= 2 && dest.row < piece.row && piece.column == dest.column) {
+            if(isMyPieceAt(dest.column, piece.row - 1))
+                return false;
+            return true;
+        }
+    }
+    else {
+        if (piece.row - dest.row == 1 && dest.row < piece.row && piece.column == dest.column)
+            return true;
+    }
+
+    //check attack
+
+    return false;
+}
+
+function checkValidRookMove(piece, dest) {
+    if(piece.row != dest.row && piece.column != dest.column)
+        return false;
+
+    else if(piece.row == dest.row) {
+        var lowerCol, higherCol;
+        if(piece.column > dest.column) {
+            lowerCol = dest.column;
+            higherCol = piece.column;
+        }
+        else {
+            lowerCol = piece.column;
+            higherCol = dest.column;
+        }
+
+        for(var i = 0; i < yPieces.length; i++) {
+            if(yPieces[i].row == piece.row && (yPieces[i].column < higherCol && yPieces[i].column > lowerCol)) 
+                    return false;    
+            }
+        
+        return true;
+    }
+    else if(piece.column == dest.column) {
+        var lowerRow, higherRow;
+        if(piece.row > dest.row) {
+            lowerRow = dest.row;
+            higherRow = piece.row;
+        }
+        else {
+            lowerRow = piece.row;
+            higherRow = dest.row;
+        }
+
+        for(var i = 0; i < yPieces.length; i++) {
+            if(yPieces[i].column == piece.column && (yPieces[i].row < higherRow && yPieces[i].row > lowerRow)) 
+                    return false;
+        }
+        return true;
+    }
+}
+
+function checkValidKnightMove(piece, dest) {
+    
+    return false;
+}
+
+function checkValidBishopMove(piece, dest) {
+
+return false;
+}
+
+function checkValidQueenMove(piece, dest) {
+
+return false;
+}
+
+function checkValidKingMove(piece, dest) {
+
+    if((piece.row == dest.row || piece.row == (dest.row + 1) || piece.row == (dest.row - 1))
+     && (piece.column == dest.column || piece.column == (dest.column + 1) || piece.column == (dest.column - 1))) {
+        return true;
+    }
+    
+    return false;
+}
+
+function reset() {
+    selectedPieceHasMoved = false;
+    selectedPieceIndex = -1;
+    yMovedPieces = new Array();
+    drawBoard();
+}
+
+function send() {
+    for(var i = 0; i < yPieces.length; i++) 
+        yPieces[i] = new Piece(yMovedPieces[i].column, yMovedPieces[i].row, yMovedPieces[i].pieceType);
+    yMovedPieces = new Array();
+    selectedPieceHasMoved = false;
+    selectedPieceIndex = -1;
+    drawBoard();
 }
