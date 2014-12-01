@@ -2,6 +2,7 @@
 <head>
 	<title>Chess Game</title>
 	<LINK REL="stylesheet" TYPE="text/css" HREF="css/style.css">
+	<script src="api/api.js"></script>
 </head>
 <body>
 
@@ -12,12 +13,12 @@
 
 			<div class="userPass">
 
-				<form>
+		
 
-				<input type="text" name="username" placeholder="UserName"> 
-				<input type="submit" value="Login">
-
-				</form>
+				<input type="text" id="userN" name="username" placeholder="UserName"> 
+				<input type="submit" value="Login" onclick="login(document.getElementById('userN').value)" >
+			
+			
 
 			</div>
 			
