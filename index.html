@@ -1,33 +1,80 @@
-<!DOCTYPE html>
-<HTML LANG="en">
-<HEAD>
-	<META CHARSET="UTF-8">
-	<META NAME="robots" CONTENT="noindex">
-	<TITLE>Chess</TITLE>
-	<SCRIPT SRC="js/jquery.js"></SCRIPT>
-	<SCRIPT SRC="js/main.js"></SCRIPT>
+<html>
+<head>
+	<title>Chess Game</title>
 	<LINK REL="stylesheet" TYPE="text/css" HREF="css/style.css">
-</HEAD>
-<BODY>
-	<DIV ID="head">
-		<DIV ID="uname">Allegorithmic</DIV>
-	</DIV>
-	<DIV ID="container">
-		<DIV ID="boardContainer">
-			<BUTTON ID="reset" TYPE="button">Reset</BUTTON>
-			<BUTTON ID="send" TYPE="button">Send</BUTTON>
-			<br/><br/>
-			<P ID="uname">Allegorithmic</P>
-			<DIV ID="endBtn"><BUTTON ID="end" TYPE="button">Forfeit</BUTTON></DIV>
-		</DIV>
-		<DIV ID="eChessClock">11:43 &#x25c0</DIV>
-		<DIV ID="uChessClock">11:45</DIV>
+</head>
+<body>
 
-	</DIV>
-		
-	</DIV>
-	<SCRIPT>
-  		initGame(null, document.getElementById('movecount'));
-	</SCRIPT>
-</BODY>
-</HTML>
+
+	<div class="wrapper">
+
+		<header>
+
+			<div class="userPass">
+
+				<form>
+
+				<input type="text" name="username" placeholder="UserName">
+				<input type="submit" value="Login">
+
+				</form>
+
+
+			</div>
+
+		</header>
+
+
+		<div class="mainBody">
+
+			<div class="titleHere">
+				<h1>Chess</h1>
+			</div>
+
+<div class="lobbiesList">
+
+			<div class="lobby">
+				Lobby1
+			</div>
+
+						<div class="lobby">
+				Lobby2
+			</div>
+
+						<div class="lobby">
+				Lobby3
+			</div>
+
+						<div class="lobby">
+				Lobby4
+			</div>
+
+						<div class="lobby">
+				Lobby5
+			</div>
+
+						<div class="lobby">
+				Lobby6
+			</div>
+
+						<div class="lobby">
+				Lobby7
+			</div>
+
+</div>
+
+
+<div class="buttonToCreateGame">
+
+	<div class="createButton">
+		Create a Game
+	</div>
+
+</div>
+
+		</div>
+
+	</div>
+
+</body>
+</html>
