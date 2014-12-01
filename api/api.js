@@ -1,7 +1,6 @@
 function login(username) {
-var url = "login.php";
-var json = '{"username":' + username + '}';
-
+var url = "api/login.php";
+var json = '{"username":"' + username + '"}';
     $.ajax({
         type: 'POST',
         url: url,
@@ -10,22 +9,22 @@ var json = '{"username":' + username + '}';
         async: true,
         contentType: 'application/json',
         success: function(result,status,xhr) {
-            var err = JSON.parse(result);
-            if(err.error == false) {
+            if(result.error == false) {
                 return true;
             }
             else {
+                alert(JSON.stringify(result));
                 return false;
             }
         },
         error: function (jqXHR, textStatus, errorThrown) {
-            alert("Game over!");
+            alert(textStatus + ":" + errorThrown);
         }
     });
 }
 
 function logout(username) {
-var url = "logout.php";
+var url = "api/logout.php";
 var json = '{"username":' + username + '}';
 
     $.ajax({
@@ -51,5 +50,9 @@ var json = '{"username":' + username + '}';
 }
 
 function getUsersWaiting() {
+    
+}
+
+function createGame() {
 
 }

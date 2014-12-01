@@ -1,8 +1,8 @@
 <?php
 require 'db_conn.php';
 $json = file_get_contents("php://input");
-$username = json_decode($json);
-$username = $username['username'];
+$user = json_decode($json);
+$username = $user->username;
 
 $sql = "SELECT * FROM Users WHERE username=:username";
 try {
@@ -13,7 +13,7 @@ try {
     if ($stmt->rowCount() == 1) {
         echo '{"error": true}';
     } else {
-    	$sqlUser = "INSERT INTO Users VALUES(:username)";
+    	$sqlUser = "INSERT INTO Users VALUES(:username, 0, 0)";
     	$stmt = $db->prepare($sqlUser);
     	$stmt->bindParam("username", $username);
     	$stmt->execute();
@@ -23,6 +23,6 @@ try {
 
     $db = null;
 } catch (PDOException $e) {
-    echo '{"error":true}';
+    echo '{"error":"' . $e->getMessage() . '"}';
 }
 ?>
