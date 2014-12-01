@@ -86,10 +86,9 @@
 
 
 <div class="buttonToCreateGame">
-
-	<div class="createButton">
-		<a href="waiting.html" >Create a Game </a>
-	</div>
+	<form action="waiting.html" class="createButton">
+		<input type="submit" value="Create a Game ">
+	</form>
 
 </div>
 
