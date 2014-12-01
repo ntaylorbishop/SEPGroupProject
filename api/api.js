@@ -1,4 +1,4 @@
-function login(var username) {
+function login(username) {
 var url = "login.php";
 var json = '{"username":' + username + '}';
 
@@ -24,7 +24,7 @@ var json = '{"username":' + username + '}';
     });
 }
 
-function logout(var username) {
+function logout(username) {
 var url = "logout.php";
 var json = '{"username":' + username + '}';
 
@@ -48,4 +48,8 @@ var json = '{"username":' + username + '}';
             alert("Something went wrong\n" + textStatus + ": " + errorThrown);
         }
     });
+}
+
+function getUsersWaiting() {
+
 }
