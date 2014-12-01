@@ -22,6 +22,6 @@ try {
 
     $db = null;
 } catch (PDOException $e) {
-    echo '{"error":{ true}';
+    echo '{"error":true}';
 }
 ?>
