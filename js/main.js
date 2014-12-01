@@ -12,11 +12,14 @@ var gDrawingContext;
 var gPattern;
 
 var oPieces;
+var oCapturedPieces = new Array();
 var oColor = 'B';
 var oNumPieces;
 
 var yPieces;
+var yDest;
 var yMovedPieces = new Array();
+var yCapturedPieces = new Array();
 var yColor = 'W';
 var yNumPieces;
 var selectedPieceIndex;
@@ -97,6 +100,7 @@ function clickOnEmptyCell(cell) {
         }
         yMovedPieces[selectedPieceIndex].row = cell.row;
         yMovedPieces[selectedPieceIndex].column = cell.column;
+        dest = cell;
         drawBoard();
     }
 }
@@ -246,9 +250,35 @@ function initGame(canvasElement) {
 	newGame();
 }
 
-function isMyPieceAt(x, y) {
-    for(var i = 0; i < yNumPieces.length; i++) {
+function isPieceAt(x, y) {
+    for(var i = 0; i < yPieces.length; i++) {
         if(yPieces[i].column == x && yPieces[i].row == y)
+            return true;
+    }
+    for(var i = 0; i < oPieces.length; i++) {
+        if(oPieces[i].column == x && oPieces[i].row == y)
+            return true;
+    }
+    return false;
+}
+
+function checkForCapture(cell) {
+    if(isEnemyPieceAt(cell.column, cell.row)) {
+        var enemyPieceIndex = -1;
+        for(var i = 0; i < oPieces.length; i++) {
+            if(oPieces[i].column == cell.column && oPieces[i].row == cell.row) {
+                enemyPieceIndex = i;
+            }
+        }
+        yCapturedPieces.push(new Piece(oPieces[enemyPieceIndex].column, oPieces[enemyPieceIndex].row, oPieces[enemyPieceIndex].pieceType));
+        oPieces.splice(enemyPieceIndex, 1);
+        oNumPieces--;
+    }
+}
+
+function isEnemyPieceAt(x, y) {
+    for(var i = 0; i < oPieces.length; i++) {
+        if(oPieces[i].column == x && oPieces[i].row == y)
             return true;
     }
     return false;
@@ -262,18 +292,25 @@ function checkValidPawnMove(piece, dest) {
     var firstMove = (piece.row == 6);
     if(firstMove) {
         if(piece.row - dest.row <= 2 && dest.row < piece.row && piece.column == dest.column) {
-            if(isMyPieceAt(dest.column, piece.row - 1))
+            if(isPieceAt(dest.column, piece.row - 1))
                 return false;
             return true;
         }
     }
     else {
-        if (piece.row - dest.row == 1 && dest.row < piece.row && piece.column == dest.column)
+        if (piece.row - dest.row == 1 && dest.row < piece.row && piece.column == dest.column) {
+            if (isPieceAt(dest.column, piece.row - 1))
+                return false;
             return true;
+        }
     }
 
     //check attack
-
+    if((dest.column == piece.column - 1 || dest.column == piece.column + 1) && dest.row == piece.row - 1) {
+        if(isEnemyPieceAt(dest.column, dest.row)) {
+            return true;
+        }
+    }
     return false;
 }
 
@@ -281,56 +318,91 @@ function checkValidRookMove(piece, dest) {
     if(piece.row != dest.row && piece.column != dest.column)
         return false;
 
-    else if(piece.row == dest.row) {
-        var lowerCol, higherCol;
-        if(piece.column > dest.column) {
-            lowerCol = dest.column;
-            higherCol = piece.column;
-        }
-        else {
-            lowerCol = piece.column;
-            higherCol = dest.column;
-        }
+    var xDir, yDir;
 
-        for(var i = 0; i < yPieces.length; i++) {
-            if(yPieces[i].row == piece.row && (yPieces[i].column < higherCol && yPieces[i].column > lowerCol)) 
-                    return false;    
-            }
-        
+    if(piece.row == dest.row) {
+        yDir = 0;
+
+        if(piece.column > dest.column)
+            xDir = -1;
+        else 
+            xDir = 1;
+
+        i = piece.column + xDir;
+
+        while(i != dest.column) {
+            if(isPieceAt(i, dest.row))
+                return false;
+            i += xDir;
+        }
         return true;
     }
     else if(piece.column == dest.column) {
-        var lowerRow, higherRow;
-        if(piece.row > dest.row) {
-            lowerRow = dest.row;
-            higherRow = piece.row;
-        }
-        else {
-            lowerRow = piece.row;
-            higherRow = dest.row;
-        }
+        xDir = 0;
 
-        for(var i = 0; i < yPieces.length; i++) {
-            if(yPieces[i].column == piece.column && (yPieces[i].row < higherRow && yPieces[i].row > lowerRow)) 
-                    return false;
+        if(piece.row > dest.row)
+            yDir = -1;
+        else 
+            yDir = 1;
+
+        i = piece.row + yDir;
+
+        while(i != dest.row) {
+            if(isPieceAt(dest.column, i))
+                return false;
+            i += yDir;
         }
         return true;
     }
 }
 
 function checkValidKnightMove(piece, dest) {
-    
+    var xDiff = Math.abs(piece.column - dest.column);
+    var yDiff = Math.abs(piece.row - dest.row);
+
+    if(((xDiff + yDiff) == 3) 
+        && (xDiff != 0) && (yDiff != 0)) {
+        return true;
+    }
+
     return false;
 }
 
 function checkValidBishopMove(piece, dest) {
+    var xDiff = Math.abs(dest.column - piece.column);
+    var yDiff = Math.abs(dest.row - piece.row);
 
-return false;
+    if(xDiff - yDiff != 0) { return false; }
+    else {
+        //check if pieces are in the way
+        var xDir, yDir;
+        if(piece.column < dest.column) 
+            xDir = 1;
+        else 
+            xDir = -1;
+        if(piece.row < dest.row) 
+            yDir = 1;
+        else 
+            yDir = -1;
+
+        i = piece.column + xDir;
+        j = piece.row + yDir;
+
+        while(i != dest.column && j != dest.row) {
+            if(isPieceAt(i, j))
+                return false;
+            i += xDir;
+            j += yDir;
+        }
+        return true;
+    }
 }
 
 function checkValidQueenMove(piece, dest) {
-
-return false;
+    if(checkValidRookMove(piece, dest) || checkValidBishopMove(piece, dest)) {
+        return true;
+    }
+    return false;
 }
 
 function checkValidKingMove(piece, dest) {
@@ -343,17 +415,19 @@ function checkValidKingMove(piece, dest) {
     return false;
 }
 
-function reset() {
+function resetMove() {
     selectedPieceHasMoved = false;
     selectedPieceIndex = -1;
     yMovedPieces = new Array();
+    dest = null;
     drawBoard();
 }
 
-function send() {
+function sendMove() {
     for(var i = 0; i < yPieces.length; i++) 
         yPieces[i] = new Piece(yMovedPieces[i].column, yMovedPieces[i].row, yMovedPieces[i].pieceType);
     yMovedPieces = new Array();
+    checkForCapture(dest);
     selectedPieceHasMoved = false;
     selectedPieceIndex = -1;
     drawBoard();
