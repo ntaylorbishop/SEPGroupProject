@@ -2,7 +2,7 @@
 require 'db_conn.php';
 $json = file_get_contents("php://input");
 $username = json_decode($json);
-$username = $username['username'];
+$username = $username->username;
 
 $sql = "SELECT * FROM Users WHERE username = :username";
 try {
@@ -22,6 +22,6 @@ try {
 
     $db = null;
 } catch (PDOException $e) {
-    echo '{"error":true}';
+    echo '{"error":"' . $e->getMessage() . '"}';
 }
 ?>

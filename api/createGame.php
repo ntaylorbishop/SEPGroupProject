@@ -11,10 +11,13 @@ try {
     $stmt->bindParam("username", $username);
     $stmt->execute();
     if ($stmt->rowCount() == 1) {
+        $sqlUser = "UPDATE Users SET waitingToConnect = 1 WHERE username = :username";
+        $stmt = $db->prepare($sqlUser);
+        $stmt->bindParam("username", $username);
+        $stmt->execute();
         echo '{"error": false}';
     } else {
-    	$sqlUser = "INSERT INTO Users VALUES(" . $username . ")";
-        echo '{"error": false}';
+        echo '{"error": true}';
     }
 
     $db = null;
