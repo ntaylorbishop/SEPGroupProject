@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Nov 30, 2014 at 11:49 PM
+-- Generation Time: Nov 30, 2014 at 10:20 PM
 -- Server version: 5.5.38-0ubuntu0.12.04.1
 -- PHP Version: 5.5.16-1+deb.sury.org~precise+1
 
@@ -28,8 +28,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE IF NOT EXISTS `Users` (
   `username` text NOT NULL,
-  `inGame` tinyint(1) NOT NULL,
-  `waitingToConnect` tinyint(1) NOT NULL
+  `inGame` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
