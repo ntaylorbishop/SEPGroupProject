@@ -150,3 +150,11 @@ font-size: 18px;
 background-color: green;
 margin: 0 auto;
 }
+
+/* waiting.html */
+
+.WaitingHeading{
+	width:auto;
+	margin: 0 auto;
+	text-align:center;
+}
