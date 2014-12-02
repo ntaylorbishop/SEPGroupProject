@@ -6,6 +6,7 @@
         <script src="js/jquery.cookie.js"></script>
 	<script src="api/api.js"></script>
 	<script src="js/style.js"></script>
+        <<script src="js/waiting.js"></script>
     </head>
     <body>
         <div class="wrapper">
