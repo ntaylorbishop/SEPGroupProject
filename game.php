@@ -11,6 +11,7 @@
 	<script src="api/api.js"></script>
         <script type="text/javascript" src="js/main.js"></script>
 	<script src="js/style.js"></script>
+        <script src="js/unload.js"></script>
 	
     </head>
     <body background="background.png">
@@ -32,14 +33,14 @@
         <div id="container">
             <div id="boardContainer">
                 <div id="eChessClock">Timer Placeholder</div>
-                <div id="uChessClock">Time Placeholder</div>
+                <div id="uChessClock">Timer Placeholder</div>
                 <input id="reset" type="button" onclick="resetMove()" value="Reset" />
                 <input id="send" TYPE="button" onclick="sendMove()" value="Send" />
                 <br/>
                 <br/>
                 <p id="uname"></p>
                 <div id="endBtn">
-                    <input id="end" type="button">Forfeit</input>
+                    <input id="end" type="button" value="Forfeit" />
                 </div>
             </div>
         </div>

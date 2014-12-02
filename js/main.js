@@ -62,7 +62,7 @@ function getCursorPosition(e) {
 function clickOnCell(e) {
     if(selectedPieceHasMoved) { return; }
     var cell = getCursorPosition(e);
-    // alert(cell.column + ", " + cell.row);
+//     alert(cell.column + ", " + cell.row);
     for (var i = 0; i < yNumPieces; i++) {
     	if ((yPieces[i].row == cell.row) && (yPieces[i].column == cell.column)) {
             selectedPieceIndex = i;
