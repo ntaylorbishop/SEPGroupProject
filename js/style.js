@@ -5,7 +5,7 @@ function loginBtn(username) {
 
 function logoutBtn(username) {
 	logout(username);
-	location.reload();
+	window.location = "index.php";
 }
 
 function connectPlayers(user1, user2) {

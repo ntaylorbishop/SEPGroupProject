@@ -4,7 +4,10 @@
 <head>
 	<title>Waiting</title>
 	<LINK REL="stylesheet" TYPE="text/css" HREF="css/style.css">
+	<script src="js/jquery.js"></script>
+        <script src="js/jquery.cookie.js"></script>
 	<script src="api/api.js"></script>
+	<script src="js/style.js"></script>
 </head>
 
 
