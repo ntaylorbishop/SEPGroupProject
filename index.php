@@ -16,28 +16,14 @@
 			<div class="userPass">
 
 		
-				<?php
-
-					if(!isset($_COOKIE['user'])){
-
-
-				?>
-				<input type="text" id="userN" name="username" placeholder="UserName"> 
-				<input type="submit" value="Login" onclick="loginBtn(document.getElementById('userN').value)" >
-			
 			<?php
-				}else{
-
-					echo "Welcome  " . $_COOKIE['user'] ;
-
-				
-			?>	
-
-			<input type="submit" value="Logout" onclick="logout(document.getElementById('userN').value)" >
-
-			<?php
-
-				}
+			if(!$_COOKIE['user']){
+				echo '<input type="text" id="userN" name="username" placeholder="UserName">';
+				echo '<input type="submit" value="Login" onclick="loginBtn(document.getElementById(\'userN\').value)">';
+			}else{
+				echo "Welcome " . $_COOKIE['user'];
+				echo '<input type="submit" value="Logout" onclick="logoutBtn(\'' . $_COOKIE['user'] . '\')">'; 
+			}
 			?>
 			
 
@@ -86,9 +72,10 @@
 
 
 <div class="buttonToCreateGame">
-	<form action="waiting.html" class="createButton">
-		<input type="submit" value="Create a Game ">
-	</form>
+
+	<div class="createButton">
+		<a href="waiting.html" >Create a Game </a>
+	</div>
 
 </div>
 
