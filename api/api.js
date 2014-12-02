@@ -111,14 +111,45 @@ function startGame(user1, user2) {
 }
 
 //Tyler's Stuff
-function send() {
+function send(user1, user2, user1Pieces, user2Pieces, user1CapturedPieces, user2CapturedPieces) {
+    var url = "api/send.php";
+    var json = "user1=" + user1 + "&user2=" + user2;
 
+    $.ajax({
+        type: 'POST',
+        url: url,
+        data: json,
+        dataType: "json",
+        async: false,
+        contentType: 'application/json',
+        success: function(result,status,xhr) {
+            alert(JSON.stringify(result));
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert("Something went wrong\n" + textStatus + ": " + errorThrown);
+        }
+    });
 }
 
-function recieve() {
+function receive(user1, user2) {
+    var url = "api/send.php";
+    var json = '{"user1":"' + user1 + '", "user2":"' + user2 + '"}';
 
+    $.ajax({
+        type: 'GET',
+        url: url,
+        data: json,
+        dataType: "json",
+        async: false,
+        contentType: 'application/json',
+        success: function(result,status,xhr) {
+            alert(JSON.stringify(result));
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert("Something went wrong\n" + textStatus + ": " + errorThrown);
+        }
+    });
 }
-
 function getBasicInfo(username) {
     var url = "api/getBasicInfo.php";
     var json = 'username=' +  username;
