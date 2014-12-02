@@ -49,7 +49,15 @@ try {
     $stmt->bindParam("user1Pieces", $user1Pieces);
     $stmt->bindParam("user2Pieces", $user2Pieces);
     $stmt->execute();
-    echo '{"error": false}';
+
+    //Update individual users
+    $sql = "UPDATE Users SET inGame = 1, waitingToConnect = 0 WHERE username = :user1 OR username = :user2";
+    $stmtA= $db->prepare($sql);
+    $stmtA->bindParam("user1", $user1);
+    $stmtA->bindParam("user2", $user2);
+    $stmtA->execute();
+
+    echo '{"error":"false"}';
 
     $db = null;
 } catch (PDOException $e) {
