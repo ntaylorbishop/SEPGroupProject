@@ -61,13 +61,7 @@ var json = '{"username":' + username + '}';
         async: true,
         contentType: 'application/json',
         success: function(result,status,xhr) {
-            var err = JSON.parse(result);
-            if(err.error == false) {
-                return true;
-            }
-            else {
-                return false;
-            }
+            return result;
         },
         error: function (jqXHR, textStatus, errorThrown) {
             alert("Something went wrong\n" + textStatus + ": " + errorThrown);
