@@ -5,7 +5,7 @@
       $.ajax({ 
           url: url, 
           success: function(data){
-              alert(data);
+              //alert(data);
             if(data === true) {
                 window.location = "game.php";
             }

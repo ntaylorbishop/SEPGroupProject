@@ -1,61 +1,50 @@
 <!DOCTYPE html>
-<HTML LANG="en">
-<HEAD>
-	<META CHARSET="UTF-8">
-	<META NAME="robots" CONTENT="noindex">
-	<TITLE>Chess</TITLE>
+<html lang="en">
+    <head>
+	<meta charset="UTF-8">
+	<meta name="robots" content="noindex">
+	<title>Chess</Title>
 	<link href="favicon.ico" rel="icon" type="image/x-icon" />
-	<SCRIPT TYPE="text/javascript" SRC="js/jquery.js"></SCRIPT>
-	<SCRIPT TYPE="text/javascript" SRC="js/main.js"></SCRIPT>
-	<LINK REL="stylesheet" TYPE="text/css" HREF="css/style.css">
-    <script src="js/jquery.cookie.js"></script>
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+	<script type="text/javascript" src="js/jquery.js"></script>
+        <script src="js/jquery.cookie.js"></script>
 	<script src="api/api.js"></script>
+        <script type="text/javascript" src="js/main.js"></script>
 	<script src="js/style.js"></script>
 	
-</HEAD>
-<body background="background.png">
-	<DIV ID="head">
-	
-			<header>
-			
-			<div class="userPass">
-
-		
-			<?php
+    </head>
+    <body background="background.png">
+	<div id="head">
+            <header>
+		<div class="userPass">
+                    <?php
 			if(!isset($_COOKIE['user'])){
-				echo '<input type="text" id="userN" name="username" placeholder="UserName">';
-				echo '<input type="submit" value="Login" onclick="loginBtn(document.getElementById(\'userN\').value)">';
-			}else{
-				echo "Welcome " . $_COOKIE['user'];
-				echo '<input type="submit" value="Logout" onclick="logoutBtn(\'' . $_COOKIE['user'] . '\')">'; 
-
+                            echo '<input type="text" id="userN" name="username" placeholder="UserName">';
+                            echo '<input type="submit" value="Login" onclick="loginBtn(document.getElementById(\'userN\').value)">';
+			} else {
+                            echo "Welcome " . $_COOKIE['user'];
+                            echo '<input type="submit" value="Logout" onclick="logoutBtn(\'' . $_COOKIE['user'] . '\')">'; 
 			}
-			?>
-			
-
-			</div>
-			
-		</header>
-		
-		
-	</DIV>
-	<DIV ID="container">
-		<DIV ID="boardContainer">
-			<DIV ID="eChessClock">11:43 &#x25c0</DIV>
-			<DIV ID="uChessClock">11:45</DIV>
-			<BUTTON ID="reset" TYPE="button" onclick="resetMove()">Reset</BUTTON>
-			<BUTTON ID="send" TYPE="button" onclick="sendMove()">Send</BUTTON>
-			<br/><br/>
-			<P ID="uname">Allegorithmic</P>
-			<DIV ID="endBtn"><BUTTON ID="end" TYPE="button">Forfeit</BUTTON></DIV>
-		</DIV>
-		
-
-	</DIV>
-		
-	</DIV>
-	<SCRIPT>
-  		initGame(null);
-	</SCRIPT>
-</BODY>
-</HTML>
+                    ?>
+		</div>
+            </header>
+        </div>
+        <div id="container">
+            <div id="boardContainer">
+                <div id="eChessClock">Timer Placeholder</div>
+                <div id="uChessClock">Time Placeholder</div>
+                <input id="reset" type="button" onclick="resetMove()" value="Reset" />
+                <input id="send" TYPE="button" onclick="sendMove()" value="Send" />
+                <br/>
+                <br/>
+                <p id="uname"></p>
+                <div id="endBtn">
+                    <input id="end" type="button">Forfeit</input>
+                </div>
+            </div>
+        </div>
+        <script>
+            initGame(null);
+        </script>
+    </body>
+</html>
