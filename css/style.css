@@ -151,3 +151,7 @@ margin: 0 auto;
 div.lobbiesList p {
     cursor: pointer;
 }
+
+div.lobbiesList p:hover {
+    background-color: #727272;
+}
