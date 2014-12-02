@@ -24,8 +24,9 @@
             </header>
             <div class="mainBody2">
                 <div class="WaitingHeading">
-					<a href="index.php" > <input type="button" value="back" /> </a>
+					<a href="index.php" > <input type="button" value="Go Back Home" /> </a>
                     <h1>  Waiting for another player to join ya ...</h1>
+					<h4> Warning: you might wait forever ...</h4>
                     <img src="img/wait.jpg" />
                 </div>
             </div>
