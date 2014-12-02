@@ -154,18 +154,19 @@ function getBasicInfo(username) {
     var url = "api/getBasicInfo.php";
     var json = 'username=' +  username;
 
-    $.ajax({
+    var info = $.ajax({
         type: 'GET',
         url: url,
         data: json,
         async: false,
         contentType: 'application/json',
         success: function(result,status,xhr) {
-            //alert(JSON.stringify(result));
-            return result;
+            alert(JSON.stringify(result));
+            //return result;
         },
         error: function (jqXHR, textStatus, errorThrown) {
             alert("Something went wrong\n" + textStatus + ": " + errorThrown);
         }
     });
+    return info;
 }
