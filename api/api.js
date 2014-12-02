@@ -118,3 +118,23 @@ function send() {
 function recieve() {
 
 }
+
+function getBasicinfo(username) {
+    var url = "api/getBasicInfo.php";
+    var json = '{"username":"' +  username + '"}';
+
+    $.ajax({
+        type: 'POST',
+        url: url,
+        data: json,
+        dataType: "json",
+        async: false,
+        contentType: 'application/json',
+        success: function(result,status,xhr) {
+            alert(JSON.stringify(result));
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert("Something went wrong\n" + textStatus + ": " + errorThrown);
+        }
+    });
+}
