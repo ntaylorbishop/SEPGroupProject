@@ -35,8 +35,7 @@ var json = '{"username":' + username + '}';
         async: true,
         contentType: 'application/json',
         success: function(result,status,xhr) {
-            var err = JSON.parse(result);
-            if(err.error == false) {
+            if(result.error == false) {
                 return true;
             }
             else {
