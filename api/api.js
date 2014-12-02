@@ -62,6 +62,7 @@ var json = '{"username":' + username + '}';
         contentType: 'application/json',
         success: function(result,status,xhr) {
             return result;
+            //yo
         },
         error: function (jqXHR, textStatus, errorThrown) {
             alert("Something went wrong\n" + textStatus + ": " + errorThrown);
