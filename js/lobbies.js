@@ -5,7 +5,7 @@ $(document).ready(function() {
 		$('.lobbiesList').append("<p>" + users[i].username + "</p>");
 		$('div.lobbiesList p').click(function() {
    			window.location.href='game.php';
-   			connectPlayers($('.lobbiesList p').text(), $.cookie('user'));
+   			startGame($('.lobbiesList p').text(), $.cookie('user'));
 		});
 	}
 
