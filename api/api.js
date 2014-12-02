@@ -92,7 +92,7 @@ function createLobby(username) {
 
 function startGame(user1, user2) {
     var url = "api/startGame.php";
-    var json = '{"username":' + username + '}';
+    var json = '{"user1":"' + user1 + '", "user2":"' + user2 + '"}';
 
     $.ajax({
         type: 'POST',
@@ -102,11 +102,7 @@ function startGame(user1, user2) {
         async: true,
         contentType: 'application/json',
         success: function(result,status,xhr) {
-            var err = JSON.parse(result);
-            if(err.error === false)
-                return true;
-            else
-                return false;
+            return;
         },
         error: function (jqXHR, textStatus, errorThrown) {
             alert("Something went wrong\n" + textStatus + ": " + errorThrown);
