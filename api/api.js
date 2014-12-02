@@ -93,6 +93,7 @@ function createLobby(username) {
 function startGame(user1, user2) {
     var url = "api/startGame.php";
     var json = '{"user1":"' + user1 + '", "user2":"' + user2 + '"}';
+    alert("sup");
 
     $.ajax({
         type: 'POST',

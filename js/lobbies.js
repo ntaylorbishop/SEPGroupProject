@@ -3,10 +3,12 @@ $(document).ready(function() {
 
 	for(var i = 0; i < users.length; i++) {
 		$('.lobbiesList').append("<p>" + users[i].username + "</p>");
-		$('div.lobbiesList p').click(function() {
-   			window.location.href='game.php';
-   			startGame($('.lobbiesList p').text(), $.cookie('user'));
-		});
 	}
 
+	$('div.lobbiesList p').click(function() {
+		alert($(this).text());
+		alert($.cookie('user'));
+		startGame($('.lobbiesList p').text(), $.cookie('user'));
+   		window.location.href='game.php';
+	});
 });

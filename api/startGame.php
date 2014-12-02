@@ -7,7 +7,7 @@ $user2 = $userData->user2;
 
 try {
     $db = dbconnect();
-    user1Pieces =  '[{"pieceType":"P", "x":0, "y":6},
+    $user1Pieces =  '[{"pieceType":"P", "x":0, "y":6},
                      {"pieceType":"P", "x":1, "y":6},
                      {"pieceType":"P", "x":2, "y":6},
                      {"pieceType":"P", "x":3, "y":6},
@@ -24,7 +24,7 @@ try {
                      {"pieceType":"K", "x":6, "y":7},
                      {"pieceType":"R", "x":7, "y":7}]';
 
-    user2Pieces =  '[{"pieceType":"P", "x":0, "y":6},
+    $user2Pieces =  '[{"pieceType":"P", "x":0, "y":6},
                      {"pieceType":"P", "x":1, "y":6},
                      {"pieceType":"P", "x":2, "y":6},
                      {"pieceType":"P", "x":3, "y":6},
