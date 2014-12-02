@@ -46,7 +46,7 @@
 
 	<?php
 		if(isset($_COOKIE['user']))
-			echo '<div class="createButton"><a href="waiting.html" >Create a Game </a></div>';
+			echo '<div class="createButton"><a href="waiting.php" >Create a Game </a></div>';
 	?>
 
 </div>

@@ -18,11 +18,15 @@
 			<div class="userPass">
 
 		
-
-				<input type="text" id="userN" name="username" placeholder="UserName"> 
-				<input type="submit" value="Login" onclick="login(document.getElementById('userN').value)" >
-			
-			
+                        <?php
+			if(!isset($_COOKIE['user'])){
+				echo '<input type="text" id="userN" name="username" placeholder="UserName">';
+				echo '<input type="submit" value="Login" onclick="loginBtn(document.getElementById(\'userN\').value)">';
+			}else{
+				echo "Welcome " . $_COOKIE['user'];
+				echo '<input type="submit" value="Logout" onclick="logoutBtn(\'' . $_COOKIE['user'] . '\')">'; 
+			}
+			?>
 
 			</div>
 			
