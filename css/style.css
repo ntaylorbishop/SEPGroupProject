@@ -18,10 +18,9 @@ div#uname {
 }
 
 div#boardContainer {
-	width: 681px;
+	width: 481px;
 	margin-left: auto;
 	margin-right: auto;
-	position:relative;
 }
 
 button#reset {
