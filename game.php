@@ -4,19 +4,20 @@
 	<META CHARSET="UTF-8">
 	<META NAME="robots" CONTENT="noindex">
 	<TITLE>Chess</TITLE>
+	<link href="favicon.ico" rel="icon" type="image/x-icon" />
 	<SCRIPT TYPE="text/javascript" SRC="js/jquery.js"></SCRIPT>
 	<SCRIPT TYPE="text/javascript" SRC="js/main.js"></SCRIPT>
 	<LINK REL="stylesheet" TYPE="text/css" HREF="css/style.css">
-		
-        <script src="js/jquery.cookie.js"></script>
+    <script src="js/jquery.cookie.js"></script>
 	<script src="api/api.js"></script>
 	<script src="js/style.js"></script>
+	
 </HEAD>
 <BODY>
 	<DIV ID="head">
 	
 			<header>
-
+			
 			<div class="userPass">
 
 		
