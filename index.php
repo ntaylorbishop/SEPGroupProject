@@ -28,14 +28,14 @@
                 <div class="titleHere">
                     <h1>Chess</h1>
 		</div>
-                <div class="lobbiesList"></div>
-                <div class="buttonToCreateGame">
-                    <?php
-                        if(isset($_COOKIE['user'])) {
-                            echo '<input type="button" id="createGame" value="Create Game" onclick="createLobby(\'' . $_COOKIE['user'] . '\')" />';
-                            //echo '<div class="createButton"><a href="waiting.php" >Create a Game </a></div>';
-                        }
-                    ?>
+                <?php 
+                    if(isset($_COOKIE['user'])) {
+                        echo '<div class="lobbiesList"></div>';
+                        echo '<div class="buttonToCreateGame">';
+                        echo '<input type="button" id="createGame" value="Create Game" onclick="createLobby(\'' . $_COOKIE['user'] . '\')" />';
+                        //echo '<div class="createButton"><a href="waiting.php" >Create a Game </a></div>';
+                    }
+                ?>
                 </div>
             </div>
         </div>

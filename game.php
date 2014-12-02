@@ -20,11 +20,10 @@
 		<div class="userPass">
                     <?php
 			if(!isset($_COOKIE['user'])){
-                            echo '<input type="text" id="userN" name="username" placeholder="UserName">';
-                            echo '<input type="submit" value="Login" onclick="loginBtn(document.getElementById(\'userN\').value)">';
+                            header("location: index.php");
 			} else {
                             echo "Welcome " . $_COOKIE['user'];
-                            echo '<input type="submit" value="Logout" onclick="logoutBtn(\'' . $_COOKIE['user'] . '\')">'; 
+                            echo '<input type="button" id="logoutBtn" value="Logout" onclick="logoutBtn(\'' . $_COOKIE['user'] . '\')">'; 
 			}
                     ?>
 		</div>
