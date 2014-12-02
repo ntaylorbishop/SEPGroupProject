@@ -42,7 +42,7 @@ function getCursorPosition(e) {
     /* returns Cell with .row and .column properties */
     var x;
     var y;
-    if (e.pageX != undefined && e.pageY != undefined) {
+    if (e.pageX !== undefined && e.pageY !== undefined) {
         x = e.pageX;
         y = e.pageY;
     }
@@ -64,7 +64,7 @@ function clickOnCell(e) {
     var cell = getCursorPosition(e);
 //     alert(cell.column + ", " + cell.row);
     for (var i = 0; i < yNumPieces; i++) {
-    	if ((yPieces[i].row == cell.row) && (yPieces[i].column == cell.column)) {
+    	if ((yPieces[i].row === cell.row) && (yPieces[i].column === cell.column)) {
             selectedPieceIndex = i;
     	    drawBoard();
     	    return;
@@ -75,21 +75,21 @@ function clickOnCell(e) {
 }
 
 function clickOnEmptyCell(cell) {
-    if(selectedPieceIndex == -1) { return; }
+    if(selectedPieceIndex === -1) { return; }
     if(selectedPieceHasMoved) { return; }
     var piece = yPieces[selectedPieceIndex];
     var validMove = false;
-    if(piece.pieceType == 'P')
+    if(piece.pieceType === 'P')
         validMove = checkValidPawnMove(piece, cell);
-    else if(piece.pieceType == 'R') 
+    else if(piece.pieceType === 'R') 
         validMove = checkValidRookMove(piece, cell);
-    else if(piece.pieceType == 'K') 
+    else if(piece.pieceType === 'K') 
         validMove = checkValidKingMove(piece, cell);
-    else if(piece.pieceType == 'Q') 
+    else if(piece.pieceType === 'Q') 
         validMove = checkValidQueenMove(piece, cell);
-    else if(piece.pieceType == 'B') 
+    else if(piece.pieceType === 'B') 
         validMove = checkValidBishopMove(piece, cell);
-    else if(piece.pieceType == 'N') 
+    else if(piece.pieceType === 'N') 
         validMove = checkValidKnightMove(piece, cell);
 
     alert(validMove);
@@ -115,7 +115,7 @@ function drawBoard() {
     //Draw board
     for(var y = 0; y < 8; y++) {
         for(var x = 0; x < 8; x++) {
-            if ((x + y) % 2 == 0) {
+            if ((x + y) % 2 === 0) {
                 gDrawingContext.fillStyle="#F0D9B5"; 
                 gDrawingContext.fillRect(x*kPieceWidth,y*kPieceHeight,kPieceWidth,kPieceHeight);
             }
@@ -134,11 +134,11 @@ function drawBoard() {
     //Draw player pieces
     if (selectedPieceHasMoved) {
         for (var i = 0; i < yMovedPieces.length; i++)
-            drawPiece(yMovedPieces[i], i == selectedPieceIndex, yColor);
+            drawPiece(yMovedPieces[i], i === selectedPieceIndex, yColor);
     }
     else if(!selectedPieceHasMoved) {
         for (var i = 0; i < yPieces.length; i++)
-            drawPiece(yPieces[i], i == selectedPieceIndex, yColor);
+            drawPiece(yPieces[i], i === selectedPieceIndex, yColor);
     }
 }
 
@@ -150,7 +150,7 @@ function drawPiece(p, selected, color) {
 
     if(selected) {
         gDrawingContext.beginPath();
-        gDrawingContext.rect(x - 5, y - 5, kPieceWidth, kPieceHeight)
+        gDrawingContext.rect(x - 5, y - 5, kPieceWidth, kPieceHeight);
         gDrawingContext.closePath();
         if(!selectedPieceHasMoved)
             gDrawingContext.fillStyle="#ffea00"; 
@@ -164,40 +164,40 @@ function drawPiece(p, selected, color) {
         gDrawingContext.drawImage(imageObj, x, y, 50, 50);
     };
 
-    if (p.pieceType == 'P' && color == 'B')
+    if (p.pieceType === 'P' && color === 'B')
         imageObj.src = 'img/chesspieces/bP.png';
-    else if (p.pieceType == 'P' && color == 'W')
+    else if (p.pieceType === 'P' && color === 'W')
         imageObj.src = 'img/chesspieces/wP.png';
-    if (p.pieceType == 'Q' && color == 'B')
+    if (p.pieceType === 'Q' && color === 'B')
         imageObj.src = 'img/chesspieces/bQ.png';
-    else if (p.pieceType == 'Q' && color =='W')
+    else if (p.pieceType === 'Q' && color ==='W')
         imageObj.src = 'img/chesspieces/wQ.png';
-    if (p.pieceType == 'K' && color == 'B')
+    if (p.pieceType === 'K' && color === 'B')
         imageObj.src = 'img/chesspieces/bK.png';
-    else if (p.pieceType == 'K' && color == 'W')
+    else if (p.pieceType === 'K' && color === 'W')
         imageObj.src = 'img/chesspieces/wK.png';
-    if (p.pieceType == 'R' && color == 'B')
+    if (p.pieceType === 'R' && color === 'B')
         imageObj.src = 'img/chesspieces/bR.png';
-    else if (p.pieceType == 'R' && color == 'W')
+    else if (p.pieceType === 'R' && color === 'W')
         imageObj.src = 'img/chesspieces/wR.png';
-    if (p.pieceType == 'B' && color == 'B')
+    if (p.pieceType === 'B' && color === 'B')
         imageObj.src = 'img/chesspieces/bB.png';
-    else if (p.pieceType == 'B' && color == 'W')
+    else if (p.pieceType === 'B' && color === 'W')
         imageObj.src = 'img/chesspieces/wB.png';
-    if (p.pieceType == 'N' && color == 'B')
+    if (p.pieceType === 'N' && color === 'B')
         imageObj.src = 'img/chesspieces/bN.png';
-    else if (p.pieceType == 'N' && color == 'W')
+    else if (p.pieceType === 'N' && color === 'W')
         imageObj.src = 'img/chesspieces/wN.png';
 
 }
 
-if (typeof resumeGame != "function") {
+if (typeof resumeGame !== "function") {
     saveGameState = function() {
 	return false;
-    }
+    };
     resumeGame = function() {
 	return false;
-    }
+    };
 }
 
 function newGame() {
@@ -252,11 +252,11 @@ function initGame(canvasElement) {
 
 function isPieceAt(x, y) {
     for(var i = 0; i < yPieces.length; i++) {
-        if(yPieces[i].column == x && yPieces[i].row == y)
+        if(yPieces[i].column === x && yPieces[i].row === y)
             return true;
     }
     for(var i = 0; i < oPieces.length; i++) {
-        if(oPieces[i].column == x && oPieces[i].row == y)
+        if(oPieces[i].column === x && oPieces[i].row === y)
             return true;
     }
     return false;
@@ -266,7 +266,7 @@ function checkForCapture(cell) {
     if(isEnemyPieceAt(cell.column, cell.row)) {
         var enemyPieceIndex = -1;
         for(var i = 0; i < oPieces.length; i++) {
-            if(oPieces[i].column == cell.column && oPieces[i].row == cell.row) {
+            if(oPieces[i].column === cell.column && oPieces[i].row === cell.row) {
                 enemyPieceIndex = i;
             }
         }
@@ -278,27 +278,27 @@ function checkForCapture(cell) {
 
 function isEnemyPieceAt(x, y) {
     for(var i = 0; i < oPieces.length; i++) {
-        if(oPieces[i].column == x && oPieces[i].row == y)
+        if(oPieces[i].column === x && oPieces[i].row === y)
             return true;
     }
     return false;
 }
 
 function checkValidPawnMove(piece, dest) {
-    if(piece.row == dest.row) 
+    if(piece.row === dest.row) 
         return false;
 
     //check move
-    var firstMove = (piece.row == 6);
+    var firstMove = (piece.row === 6);
     if(firstMove) {
-        if(piece.row - dest.row <= 2 && dest.row < piece.row && piece.column == dest.column) {
+        if(piece.row - dest.row <= 2 && dest.row < piece.row && piece.column === dest.column) {
             if(isPieceAt(dest.column, piece.row - 1))
                 return false;
             return true;
         }
     }
     else {
-        if (piece.row - dest.row == 1 && dest.row < piece.row && piece.column == dest.column) {
+        if (piece.row - dest.row === 1 && dest.row < piece.row && piece.column === dest.column) {
             if (isPieceAt(dest.column, piece.row - 1))
                 return false;
             return true;
@@ -306,7 +306,7 @@ function checkValidPawnMove(piece, dest) {
     }
 
     //check attack
-    if((dest.column == piece.column - 1 || dest.column == piece.column + 1) && dest.row == piece.row - 1) {
+    if((dest.column === piece.column - 1 || dest.column === piece.column + 1) && dest.row === piece.row - 1) {
         if(isEnemyPieceAt(dest.column, dest.row)) {
             return true;
         }
@@ -315,12 +315,12 @@ function checkValidPawnMove(piece, dest) {
 }
 
 function checkValidRookMove(piece, dest) {
-    if(piece.row != dest.row && piece.column != dest.column)
+    if(piece.row !== dest.row && piece.column !== dest.column)
         return false;
 
     var xDir, yDir;
 
-    if(piece.row == dest.row) {
+    if(piece.row === dest.row) {
         yDir = 0;
 
         if(piece.column > dest.column)
@@ -330,14 +330,14 @@ function checkValidRookMove(piece, dest) {
 
         i = piece.column + xDir;
 
-        while(i != dest.column) {
+        while(i !== dest.column) {
             if(isPieceAt(i, dest.row))
                 return false;
             i += xDir;
         }
         return true;
     }
-    else if(piece.column == dest.column) {
+    else if(piece.column === dest.column) {
         xDir = 0;
 
         if(piece.row > dest.row)
@@ -347,7 +347,7 @@ function checkValidRookMove(piece, dest) {
 
         i = piece.row + yDir;
 
-        while(i != dest.row) {
+        while(i !== dest.row) {
             if(isPieceAt(dest.column, i))
                 return false;
             i += yDir;
@@ -360,8 +360,8 @@ function checkValidKnightMove(piece, dest) {
     var xDiff = Math.abs(piece.column - dest.column);
     var yDiff = Math.abs(piece.row - dest.row);
 
-    if(((xDiff + yDiff) == 3) 
-        && (xDiff != 0) && (yDiff != 0)) {
+    if(((xDiff + yDiff) === 3) 
+        && (xDiff !== 0) && (yDiff !== 0)) {
         return true;
     }
 
@@ -372,7 +372,7 @@ function checkValidBishopMove(piece, dest) {
     var xDiff = Math.abs(dest.column - piece.column);
     var yDiff = Math.abs(dest.row - piece.row);
 
-    if(xDiff - yDiff != 0) { return false; }
+    if(xDiff - yDiff !== 0) { return false; }
     else {
         //check if pieces are in the way
         var xDir, yDir;
@@ -388,7 +388,7 @@ function checkValidBishopMove(piece, dest) {
         i = piece.column + xDir;
         j = piece.row + yDir;
 
-        while(i != dest.column && j != dest.row) {
+        while(i !== dest.column && j !== dest.row) {
             if(isPieceAt(i, j))
                 return false;
             i += xDir;
@@ -407,8 +407,8 @@ function checkValidQueenMove(piece, dest) {
 
 function checkValidKingMove(piece, dest) {
 
-    if((piece.row == dest.row || piece.row == (dest.row + 1) || piece.row == (dest.row - 1))
-     && (piece.column == dest.column || piece.column == (dest.column + 1) || piece.column == (dest.column - 1))) {
+    if((piece.row === dest.row || piece.row === (dest.row + 1) || piece.row === (dest.row - 1))
+     && (piece.column === dest.column || piece.column === (dest.column + 1) || piece.column === (dest.column - 1))) {
         return true;
     }
     
