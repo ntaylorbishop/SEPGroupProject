@@ -68,7 +68,7 @@ var url = "api/users_waiting.php";
 
 function createLobby(username) {
     var url = "api/createGame.php";
-    var json = '{"username":' + username + '}';
+    var json = '{"username":"' + username + '"}';
 
     $.ajax({
         type: 'POST',
@@ -78,8 +78,8 @@ function createLobby(username) {
         async: true,
         contentType: 'application/json',
         success: function(result,status,xhr) {
-            var err = JSON.parse(result);
-            if(err.error === false)
+            window.location = "waiting.php";
+            if(result.error === false)
                 return true;
             else
                 return false;
