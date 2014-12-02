@@ -49,24 +49,19 @@ var json = '{"username":' + username + '}';
 }
 
 function getUsersWaiting() {
-var url = "api/createGame.php";
-var json = '{"username":' + username + '}';
+var url = "api/users_waiting.php";
 
-    $.ajax({
-        type: 'POST',
+    var users = $.ajax({
+        type: 'GET',
         url: url,
-        data: json,
         dataType: "json",
-        async: true,
+        async: false,
         contentType: 'application/json',
-        success: function(result,status,xhr) {
-            return result;
-            //yo
-        },
         error: function (jqXHR, textStatus, errorThrown) {
             alert("Something went wrong\n" + textStatus + ": " + errorThrown);
         }
     });
+    return users.responseText;
 }
 
 function createLobby(username) {

@@ -1,13 +1,13 @@
 <?php
 require 'db_conn.php';
 
-$sql = "SELECT * FROM Users";
+$sql = "SELECT * FROM Users WHERE waitingToConnect = 1";
+
 try {
     $db = dbconnect();
     $stmt = $db->prepare($sql);
-    $stmt->bindParam("username", $username);
     $stmt->execute();
-    $usersWaiting = $stmt->fetch(PDO::FETCH_ASSOC);
+    $usersWaiting = $stmt->fetchAll(PDO::FETCH_ASSOC);
     echo json_encode($usersWaiting);
 
     $db = null;

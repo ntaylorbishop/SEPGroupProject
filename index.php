@@ -38,37 +38,7 @@
 				<h1>Chess</h1>
 			</div>
 
-<div class="lobbiesList">
-
-			<div class="lobby">
-				Lobby1
-			</div>
-
-						<div class="lobby">
-				Lobby2
-			</div>
-
-						<div class="lobby">
-				Lobby3
-			</div>
-
-						<div class="lobby">
-				Lobby4
-			</div>
-
-						<div class="lobby">
-				Lobby5
-			</div>
-
-						<div class="lobby">
-				Lobby6
-			</div>
-
-						<div class="lobby">
-				Lobby7
-			</div>
-
-</div>
+<div class="lobbiesList"></div>
 
 
 <div class="buttonToCreateGame">
