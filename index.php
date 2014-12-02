@@ -44,9 +44,10 @@
 
 <div class="buttonToCreateGame">
 
-	<div class="createButton">
-		<a href="waiting.html" >Create a Game </a>
-	</div>
+	<?php
+		if(isset($_COOKIE['user']))
+			echo '<div class="createButton"><a href="waiting.html" >Create a Game </a></div>';
+	?>
 
 </div>
 
