@@ -93,17 +93,16 @@ function createLobby(username) {
 function startGame(user1, user2) {
     var url = "api/startGame.php";
     var json = '{"user1":"' + user1 + '", "user2":"' + user2 + '"}';
-    alert("sup");
 
     $.ajax({
         type: 'POST',
         url: url,
         data: json,
         dataType: "json",
-        async: true,
+        async: false,
         contentType: 'application/json',
         success: function(result,status,xhr) {
-            return;
+            window.location.href='game.php';
         },
         error: function (jqXHR, textStatus, errorThrown) {
             alert("Something went wrong\n" + textStatus + ": " + errorThrown);

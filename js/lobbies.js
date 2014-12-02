@@ -6,9 +6,6 @@ $(document).ready(function() {
 	}
 
 	$('div.lobbiesList p').click(function() {
-		alert($(this).text());
-		alert($.cookie('user'));
-		startGame($('.lobbiesList p').text(), $.cookie('user'));
-   		window.location.href='game.php';
+		startGame($(this).text(), $.cookie('user'));
 	});
 });
