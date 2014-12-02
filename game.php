@@ -13,7 +13,7 @@
 	<script src="js/style.js"></script>
 	
 </HEAD>
-<BODY>
+<body background="background.png">
 	<DIV ID="head">
 	
 			<header>

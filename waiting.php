@@ -9,7 +9,7 @@
 	<script src="js/style.js"></script>
     <script src="js/waiting.js"></script>
     </head>
-    <body>
+    <body background="background.png">
         <div class="wrapper">
             <header>
                 <div class="userPass">
