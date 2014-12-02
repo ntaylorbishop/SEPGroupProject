@@ -119,19 +119,19 @@ function recieve() {
 
 }
 
-function getBasicinfo(username) {
+function getBasicInfo(username) {
     var url = "api/getBasicInfo.php";
-    var json = '{"username":"' +  username + '"}';
+    var json = 'username=' +  username;
 
     $.ajax({
         type: 'GET',
         url: url,
         data: json,
-        dataType: "json",
         async: false,
         contentType: 'application/json',
         success: function(result,status,xhr) {
-            alert(JSON.stringify(result));
+            //alert(JSON.stringify(result));
+            return result;
         },
         error: function (jqXHR, textStatus, errorThrown) {
             alert("Something went wrong\n" + textStatus + ": " + errorThrown);

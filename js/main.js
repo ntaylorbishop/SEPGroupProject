@@ -201,6 +201,14 @@ if (typeof resumeGame !== "function") {
 }
 
 function newGame() {
+    
+    var info = getBasicInfo($.cookie('user'));
+    alert(info);
+    
+    
+    
+    
+    
     oPieces = [new Piece(0, 0, 'R'), new Piece(1, 0, 'N'), new Piece(2, 0, 'B'), new Piece(3, 0, 'K'), 
                new Piece(4, 0, 'Q'), new Piece(5, 0, 'B'), new Piece(6, 0, 'N'), new Piece(7, 0, 'R'), 
 
@@ -431,4 +439,20 @@ function sendMove() {
     selectedPieceHasMoved = false;
     selectedPieceIndex = -1;
     drawBoard();
+}
+
+function invertPieceLocations(pieces) {
+    for(var i = 0; i < pieces.length; i++) {
+        pieces[i] = invertPiece(pieces[i]);
+    }
+}
+
+function invertPiece(piece) {
+    var x = piece.column;
+    var y = piece.row;
+    
+    piece.column = 7 % x;
+    piece.row = 7 % y;
+    
+    return piece;
 }
