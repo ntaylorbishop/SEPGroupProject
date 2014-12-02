@@ -1,5 +1,6 @@
 <?php
 require 'db_conn.php';
+$username = $_GET['username'];
 $json = file_get_contents("php://input");
 $user = json_decode($json);
 $username = $user->username;

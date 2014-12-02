@@ -124,7 +124,7 @@ function getBasicinfo(username) {
     var json = '{"username":"' +  username + '"}';
 
     $.ajax({
-        type: 'POST',
+        type: 'GET',
         url: url,
         data: json,
         dataType: "json",
