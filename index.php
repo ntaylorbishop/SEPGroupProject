@@ -3,6 +3,7 @@
 	<title>Chess Game</title>
 	<LINK REL="stylesheet" TYPE="text/css" HREF="css/style.css">
 	<script src="js/jquery.js"></script>
+        <script src="js/jquery.cookie.js"></script>
 	<script src="api/api.js"></script>
 	<script src="js/style.js"></script>
 </head>
@@ -17,7 +18,7 @@
 
 		
 			<?php
-			if(!$_COOKIE['user']){
+			if(!isset($_COOKIE['user'])){
 				echo '<input type="text" id="userN" name="username" placeholder="UserName">';
 				echo '<input type="submit" value="Login" onclick="loginBtn(document.getElementById(\'userN\').value)">';
 			}else{

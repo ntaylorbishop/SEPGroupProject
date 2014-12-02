@@ -12,10 +12,7 @@ try {
     $stmt->execute();
     if ($stmt->rowCount() != 1) {
         echo '{"error": true}';
-    }
-    else {
-        unset($_COOKIE['user']);
-        setcookie('user', null, -1, '/');
+    } else {
     	$sqlUser = "DELETE FROM Users WHERE username = :username";
         $stmt = $db->prepare($sqlUser);
         $stmt->bindParam("username", $username);

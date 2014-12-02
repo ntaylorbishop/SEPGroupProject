@@ -11,14 +11,13 @@ try {
     $stmt->bindParam("username", $username);
     $stmt->execute();
     if ($stmt->rowCount() == 1) {
-		setcookie("user", $username, time() + 7200, '/');
         echo '{"error": true}';
     } else {
     	$sqlUser = "INSERT INTO Users VALUES(:username, 0, 0)";
     	$stmt = $db->prepare($sqlUser);
     	$stmt->bindParam("username", $username);
     	$stmt->execute();
-    	setcookie("user", $username, time() + 7200, '/');
+    	//setcookie("user", $username, time() + 7200, '/');
         echo '{"error": false}';
     }
 

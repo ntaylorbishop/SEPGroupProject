@@ -6,10 +6,11 @@ var json = '{"username":"' + username + '"}';
         url: url,
         data: json,
         dataType: "json",
-        async: true,
+        async: false,
         contentType: 'application/json',
-        success: function(result,status,xhr) {
-            if(result.error == false) {
+        success: function(result, status, xhr) {
+            $.cookie('user', username, { expires: 1, path: '/' });
+            if(result.error === false) {
                 return true;
             }
             else {
@@ -25,17 +26,18 @@ var json = '{"username":"' + username + '"}';
 
 function logout(username) {
 var url = "api/logout.php";
-var json = '{"username":' + username + '}';
+var json = '{"username":"' + username + '"}';
 
     $.ajax({
         type: 'POST',
         url: url,
         data: json,
         dataType: "json",
-        async: true,
+        async: false,
         contentType: 'application/json',
         success: function(result,status,xhr) {
-            if(result.error == false) {
+            $.cookie('user', username, { expires: -1, path: '/' });
+            if(result.error === false) {
                 return true;
             }
             else {
@@ -77,7 +79,7 @@ function createLobby(username) {
         contentType: 'application/json',
         success: function(result,status,xhr) {
             var err = JSON.parse(result);
-            if(err.error == false)
+            if(err.error === false)
                 return true;
             else
                 return false;
@@ -101,7 +103,7 @@ function startGame(user1, user2) {
         contentType: 'application/json',
         success: function(result,status,xhr) {
             var err = JSON.parse(result);
-            if(err.error == false)
+            if(err.error === false)
                 return true;
             else
                 return false;
