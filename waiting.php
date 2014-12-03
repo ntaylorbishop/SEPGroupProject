@@ -8,6 +8,7 @@
 	<script src="api/api.js"></script>
 	<script src="js/style.js"></script>
     <script src="js/waiting.js"></script>
+	<link href='http://fonts.googleapis.com/css?family=Piedra' rel='stylesheet' type='text/css'>
     </head>
     <body background="background.png">
         <div class="wrapper">

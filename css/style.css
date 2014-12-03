@@ -1,14 +1,17 @@
 body {
 	margin: 0%;
+	font-family: 'Audiowide', cursive;
+	font-family: 'Piedra', cursive;
 }
-
+.titleHere{
+	font-family: 'Cinzel Decorative', cursive;
+}
 div#head {
 	height: 30px;
 	width: 100%;
 	background-color: #727272;
 	margin-bottom: 50px;
 	color: white;
-	font-family: Arial, Helvetica, sans-serif;
 }
 div#uname {
 	vertical-align: middle;
@@ -38,7 +41,6 @@ div#endBtn {
 }
 
 p#ename, p#uname {
-	font-family: Arial, Helvetica, sans-serif;
 	font-weight: bold;
 	font-size: 1.2em;
 	margin-right: auto;
@@ -53,32 +55,30 @@ div#eChessClock {
 	position: absolute;
 	right: 0px;
 	top: 50px;
-	font-family: Arial, Helvetica, sans-serif;
 	font-size: 1.3em;
 }
 div#uChessClock {
 	position:absolute;
 	right: 0px;
 	top: 480px;
-	font-family: Arial, Helvetica, sans-serif;
 	font-size: 1.3em;
 }
 
 div.wrapper{
-	font-family:monospace;
 	width: 100%;
 	height: 100%;
 	position: relative;
 }
 
-
+.mainimg{
+	width: inherit;
+}
 header{
 	height: 30px;
 	width: 100%;
 	background-color: #727272;
 	margin-bottom: 50px;
 	color: white;
-	font-family: Arial, Helvetica, sans-serif;
 }
 
 .userPass{
@@ -126,6 +126,7 @@ border: 1px solid green;
 	width: 100%;
 	position: relative;
 	margin-top: 60px;
+	text-align: -webkit-center;
 
 }
 

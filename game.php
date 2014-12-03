@@ -5,13 +5,14 @@
 	<meta name="robots" content="noindex">
 	<title>Chess</Title>
 	<link href="favicon.ico" rel="icon" type="image/x-icon" />
-        <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
 	<script type="text/javascript" src="js/jquery.js"></script>
-        <script src="js/jquery.cookie.js"></script>
+    <script src="js/jquery.cookie.js"></script>
 	<script src="api/api.js"></script>
-        <script type="text/javascript" src="js/main.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
 	<script src="js/style.js"></script>
-        <script src="js/unload.js"></script>
+    <script src="js/unload.js"></script>
+	<link href='http://fonts.googleapis.com/css?family=Audiowide' rel='stylesheet' type='text/css'>
 	
     </head>
     <body background="background.png">

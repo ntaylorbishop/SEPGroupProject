@@ -8,6 +8,9 @@
 	<script src="api/api.js"></script>
 	<script src="js/style.js"></script>
     <script src="js/lobbies.js"></script>
+	<link href='http://fonts.googleapis.com/css?family=Cinzel+Decorative' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Audiowide' rel='stylesheet' type='text/css'>
+
     </head>
     <body background="background.png">
         <div class="wrapper">
@@ -26,7 +29,8 @@
             </header>
             <div class="mainBody">
                 <div class="titleHere">
-                    <h1>Chess</h1>
+                    <h1>Classic Chess Game</h1>
+					<img class="mainimg" src="img/chess.jpg" alt="Chess">
 		</div>
                 <?php 
                     if(isset($_COOKIE['user'])) {
