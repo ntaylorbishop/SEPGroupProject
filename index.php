@@ -7,6 +7,7 @@
     <script src="js/jquery.cookie.js"></script>
 	<script src="api/api.js"></script>
 	<script src="js/style.js"></script>
+    <script src="js/pollLobbies.js"></script>
     <script src="js/lobbies.js"></script>
 	<link href='http://fonts.googleapis.com/css?family=Cinzel+Decorative' rel='stylesheet' type='text/css'>
 	<link href='http://fonts.googleapis.com/css?family=Audiowide' rel='stylesheet' type='text/css'>
