@@ -133,13 +133,12 @@ function send(user1, user2, user1Pieces, user2Pieces, user1CapturedPieces, user2
 
 function receive(user1, user2) {
     var url = "api/send.php";
-    var json = '{"user1":"' + user1 + '", "user2":"' + user2 + '"}';
+    var json = 'user1=' + user1 + '&user2=' + user2;
 
-    $.ajax({
+    var info = $.ajax({
         type: 'GET',
         url: url,
         data: json,
-        dataType: "json",
         async: false,
         contentType: 'application/json',
         success: function(result,status,xhr) {
@@ -149,6 +148,7 @@ function receive(user1, user2) {
             alert("Something went wrong\n" + textStatus + ": " + errorThrown);
         }
     });
+    return info.responseText;
 }
 function getBasicInfo(username) {
     var url = "api/getBasicInfo.php";
