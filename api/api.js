@@ -171,8 +171,7 @@ function getBasicInfo(username) {
     return info.responseText;
 }
 
-function forfeitGame(user2) {
-    var user1 = $.cookie('user');
+function forfeitGame(user1, user2) {
     var url = "api/endGame.php";
     var json = "user1=" + user1 + "&user2=" + user2;
 

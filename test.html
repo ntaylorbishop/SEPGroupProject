@@ -1,0 +1,23 @@
+<HTML>
+<HEAD>
+	<script src="js/jquery.js"></script>
+	<script src="api/api.js"></script>
+	<SCRIPT TYPE="text/javascript">
+		function testSend() {
+			var user1 = "user4";
+			var user2 = "oeaueoau";
+			var user1Pieces = '"user1Pieces": [{"pieceType":"P", "x":0,"y":6},{"pieceType":"P","x":1,"y":6},{"pieceType":"P","x":2,"y":6},{"pieceType":"P","x":3,"y":6},{"pieceType":"P","x":4,"y":6},{"pieceType":"P","x":5,"y":6},{"pieceType":"P","x":6,"y":6},{"pieceType":"P","x":7,"y":6},{"pieceType":"R","x":0,"y":7},{"pieceType":"N","x":1, "y":7},{"pieceType":"B","x":2,"y":7},{"pieceType":"Q","x":3,"y":7},{"pieceType":"K","x":4,"y":7},{"pieceType":"B", "x":5, "y":7},{"pieceType":"N", "x":6,"y":7},{"pieceType":"R", "x":7, "y":7}]';
+			var user2Pieces = '"user2Pieces": [{"pieceType":"P", "x":0, "y":6},{"pieceType":"P", "x":1, "y":6},{"pieceType":"P", "x":2, "y":6},{"pieceType":"P", "x":3, "y":6},{"pieceType":"P", "x":4, "y":6},{"pieceType":"P", "x":5, "y":6},{"pieceType":"P", "x":6, "y":6},{"pieceType":"P", "x":7, "y":6},{"pieceType":"R", "x":0, "y":7},{"pieceType":"N", "x":1, "y":7},{"pieceType":"B", "x":2, "y":7},{"pieceType":"Q", "x":3, "y":7},{"pieceType":"K", "x":4, "y":7},{"pieceType":"B", "x":5, "y":7},{"pieceType":"N", "x":6, "y":7},{"pieceType":"R", "x":7, "y":7}]';
+			var user1CapturedPieces = '"user1CapturedPieces": [{"pieceType":"P"},{"pieceType":"P"},{"pieceType":"P"},{"pieceType":"P"}]';
+			var user2CapturedPieces = '"user2CapturedPieces": [{"pieceType":"P"},{"pieceType":"R"},{"pieceType":"N"},{"pieceType":"B"}]';
+			var userTime = '"userTime": [{"user1Time": "00:15:00"},{"user2Time": "00:15:00"}]';
+
+
+			send(user1, user2, user1Pieces, user2Pieces, user1CapturedPieces, user2CapturedPieces, userTime);
+		}
+	</SCRIPT>
+</HEAD>
+<BODY>
+	<CENTER><INPUT TYPE="button" VALUE="Test!" onclick="testSend()"/></CENTER>
+</BODY>
+</HTML>
