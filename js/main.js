@@ -11,7 +11,11 @@ var gCanvasElement;
 var gDrawingContext;
 var gPattern;
 
-var enemyName;
+var myturn;
+
+var user1Name;
+var user2Name;
+
 var oPieces = [];
 var oCapturedPieces = new Array();
 var oColor;
@@ -28,19 +32,19 @@ var selectedPieceHasMoved;
 
 var gGameInProgress;
 
-function Cell(column, row) {
-    this.row = row;
-    this.column = column;
+function Cell(x, y) {
+    this.y = y;
+    this.x = x;
 }
 
-function Piece(column, row, pieceType) {
-    this.row = row;
-    this.column = column;
+function Piece(x, y, pieceType) {
+    this.y = y;
+    this.x = x;
     this.pieceType = pieceType;
 }
 
 function getCursorPosition(e) {
-    /* returns Cell with .row and .column properties */
+    /* returns Cell with .y and .x properties */
     var x;
     var y;
     if (e.pageX !== undefined && e.pageY !== undefined) {
@@ -61,11 +65,11 @@ function getCursorPosition(e) {
 }
 
 function clickOnCell(e) {
-    if(selectedPieceHasMoved) { return; }
+    if(selectedPieceHasMoved || !myturn) { return; }
     var cell = getCursorPosition(e);
-//     alert(cell.column + ", " + cell.row);
+//     alert(cell.x + ", " + cell.y);
     for (var i = 0; i < yNumPieces; i++) {
-    	if ((yPieces[i].row === cell.row) && (yPieces[i].column === cell.column)) {
+    	if ((yPieces[i].y === cell.y) && (yPieces[i].x === cell.x)) {
             selectedPieceIndex = i;
     	    drawBoard();
     	    return;
@@ -97,10 +101,10 @@ function clickOnEmptyCell(cell) {
     if(validMove) {
         selectedPieceHasMoved = true;
         for(var i = 0; i < yPieces.length; i++) {
-            yMovedPieces.push(new Piece(yPieces[i].column, yPieces[i].row, yPieces[i].pieceType));
+            yMovedPieces.push(new Piece(yPieces[i].x, yPieces[i].y, yPieces[i].pieceType));
         }
-        yMovedPieces[selectedPieceIndex].row = cell.row;
-        yMovedPieces[selectedPieceIndex].column = cell.column;
+        yMovedPieces[selectedPieceIndex].y = cell.y;
+        yMovedPieces[selectedPieceIndex].x = cell.x;
         dest = cell;
         drawBoard();
     }
@@ -144,10 +148,10 @@ function drawBoard() {
 }
 
 function drawPiece(p, selected, color) {
-    var column = p.column;
-    var row = p.row;
-    var x = (column * kPieceWidth) + 5;
-    var y = (row * kPieceHeight) + 5;
+    var x = p.x;
+    var y = p.y;
+    var x = (x * kPieceWidth) + 5;
+    var y = (y * kPieceHeight) + 5;
 
     if(selected) {
         gDrawingContext.beginPath();
@@ -208,7 +212,9 @@ function newGame() {
         yColor = 'W';
         oColor = 'B';
         
-        enemyName = info.user2;
+        user1Name = $.cookie('user');
+        user2Name = info.user2;
+        myturn = true;
         
         $('#uname').html(info.user1);
         $('#ename').html(info.user2);
@@ -229,7 +235,9 @@ function newGame() {
         yColor = 'B';
         oColor = 'W';
         
-        enemyName = info.user1;
+        user1Name = info.user1;
+        user2Name = $.cookie('user');
+        myturn = false;
         
         $('#uname').html(info.user2);
         $('#ename').html(info.user1);
@@ -255,6 +263,10 @@ function newGame() {
     selectedPieceHasMoved = false;
     gGameInProgress = true;
     drawBoard();
+    
+    if(!myturn) {
+        receiveData();
+    }
 }
 
 function endGame() {
@@ -280,25 +292,25 @@ function initGame(canvasElement) {
 
 function isPieceAt(x, y) {
     for(var i = 0; i < yPieces.length; i++) {
-        if(yPieces[i].column === x && yPieces[i].row === y)
+        if(yPieces[i].x === x && yPieces[i].y === y)
             return true;
     }
     for(var i = 0; i < oPieces.length; i++) {
-        if(oPieces[i].column === x && oPieces[i].row === y)
+        if(oPieces[i].x === x && oPieces[i].y === y)
             return true;
     }
     return false;
 }
 
 function checkForCapture(cell) {
-    if(isEnemyPieceAt(cell.column, cell.row)) {
+    if(isEnemyPieceAt(cell.x, cell.y)) {
         var enemyPieceIndex = -1;
         for(var i = 0; i < oPieces.length; i++) {
-            if(oPieces[i].column === cell.column && oPieces[i].row === cell.row) {
+            if(oPieces[i].x === cell.x && oPieces[i].y === cell.y) {
                 enemyPieceIndex = i;
             }
         }
-        yCapturedPieces.push(new Piece(oPieces[enemyPieceIndex].column, oPieces[enemyPieceIndex].row, oPieces[enemyPieceIndex].pieceType));
+        yCapturedPieces.push(new Piece(oPieces[enemyPieceIndex].x, oPieces[enemyPieceIndex].y, oPieces[enemyPieceIndex].pieceType));
         oPieces.splice(enemyPieceIndex, 1);
         oNumPieces--;
     }
@@ -306,36 +318,36 @@ function checkForCapture(cell) {
 
 function isEnemyPieceAt(x, y) {
     for(var i = 0; i < oPieces.length; i++) {
-        if(oPieces[i].column === x && oPieces[i].row === y)
+        if(oPieces[i].x === x && oPieces[i].y === y)
             return true;
     }
     return false;
 }
 
 function checkValidPawnMove(piece, dest) {
-    if(piece.row === dest.row) 
+    if(piece.y === dest.y) 
         return false;
 
     //check move
-    var firstMove = (piece.row === 6);
+    var firstMove = (piece.y === 6);
     if(firstMove) {
-        if(piece.row - dest.row <= 2 && dest.row < piece.row && piece.column === dest.column) {
-            if(isPieceAt(dest.column, piece.row - 1))
+        if(piece.y - dest.y <= 2 && dest.y < piece.y && piece.x === dest.x) {
+            if(isPieceAt(dest.x, piece.y - 1))
                 return false;
             return true;
         }
     }
     else {
-        if (piece.row - dest.row === 1 && dest.row < piece.row && piece.column === dest.column) {
-            if (isPieceAt(dest.column, piece.row - 1))
+        if (piece.y - dest.y === 1 && dest.y < piece.y && piece.x === dest.x) {
+            if (isPieceAt(dest.x, piece.y - 1))
                 return false;
             return true;
         }
     }
 
     //check attack
-    if((dest.column === piece.column - 1 || dest.column === piece.column + 1) && dest.row === piece.row - 1) {
-        if(isEnemyPieceAt(dest.column, dest.row)) {
+    if((dest.x === piece.x - 1 || dest.x === piece.x + 1) && dest.y === piece.y - 1) {
+        if(isEnemyPieceAt(dest.x, dest.y)) {
             return true;
         }
     }
@@ -343,40 +355,40 @@ function checkValidPawnMove(piece, dest) {
 }
 
 function checkValidRookMove(piece, dest) {
-    if(piece.row !== dest.row && piece.column !== dest.column)
+    if(piece.y !== dest.y && piece.x !== dest.x)
         return false;
 
     var xDir, yDir;
 
-    if(piece.row === dest.row) {
+    if(piece.y === dest.y) {
         yDir = 0;
 
-        if(piece.column > dest.column)
+        if(piece.x > dest.x)
             xDir = -1;
         else 
             xDir = 1;
 
-        i = piece.column + xDir;
+        i = piece.x + xDir;
 
-        while(i !== dest.column) {
-            if(isPieceAt(i, dest.row))
+        while(i !== dest.x) {
+            if(isPieceAt(i, dest.y))
                 return false;
             i += xDir;
         }
         return true;
     }
-    else if(piece.column === dest.column) {
+    else if(piece.x === dest.x) {
         xDir = 0;
 
-        if(piece.row > dest.row)
+        if(piece.y > dest.y)
             yDir = -1;
         else 
             yDir = 1;
 
-        i = piece.row + yDir;
+        i = piece.y + yDir;
 
-        while(i !== dest.row) {
-            if(isPieceAt(dest.column, i))
+        while(i !== dest.y) {
+            if(isPieceAt(dest.x, i))
                 return false;
             i += yDir;
         }
@@ -385,8 +397,8 @@ function checkValidRookMove(piece, dest) {
 }
 
 function checkValidKnightMove(piece, dest) {
-    var xDiff = Math.abs(piece.column - dest.column);
-    var yDiff = Math.abs(piece.row - dest.row);
+    var xDiff = Math.abs(piece.x - dest.x);
+    var yDiff = Math.abs(piece.y - dest.y);
 
     if(((xDiff + yDiff) === 3) 
         && (xDiff !== 0) && (yDiff !== 0)) {
@@ -397,26 +409,26 @@ function checkValidKnightMove(piece, dest) {
 }
 
 function checkValidBishopMove(piece, dest) {
-    var xDiff = Math.abs(dest.column - piece.column);
-    var yDiff = Math.abs(dest.row - piece.row);
+    var xDiff = Math.abs(dest.x - piece.x);
+    var yDiff = Math.abs(dest.y - piece.y);
 
     if(xDiff - yDiff !== 0) { return false; }
     else {
         //check if pieces are in the way
         var xDir, yDir;
-        if(piece.column < dest.column) 
+        if(piece.x < dest.x) 
             xDir = 1;
         else 
             xDir = -1;
-        if(piece.row < dest.row) 
+        if(piece.y < dest.y) 
             yDir = 1;
         else 
             yDir = -1;
 
-        i = piece.column + xDir;
-        j = piece.row + yDir;
+        i = piece.x + xDir;
+        j = piece.y + yDir;
 
-        while(i !== dest.column && j !== dest.row) {
+        while(i !== dest.x && j !== dest.y) {
             if(isPieceAt(i, j))
                 return false;
             i += xDir;
@@ -435,8 +447,8 @@ function checkValidQueenMove(piece, dest) {
 
 function checkValidKingMove(piece, dest) {
 
-    if((piece.row === dest.row || piece.row === (dest.row + 1) || piece.row === (dest.row - 1))
-     && (piece.column === dest.column || piece.column === (dest.column + 1) || piece.column === (dest.column - 1))) {
+    if((piece.y === dest.y || piece.y === (dest.y + 1) || piece.y === (dest.y - 1))
+     && (piece.x === dest.x || piece.x === (dest.x + 1) || piece.x === (dest.x - 1))) {
         return true;
     }
     
@@ -453,12 +465,40 @@ function resetMove() {
 
 function sendMove() {
     for(var i = 0; i < yPieces.length; i++) 
-        yPieces[i] = new Piece(yMovedPieces[i].column, yMovedPieces[i].row, yMovedPieces[i].pieceType);
+        yPieces[i] = new Piece(yMovedPieces[i].x, yMovedPieces[i].y, yMovedPieces[i].pieceType);
     yMovedPieces = new Array();
     checkForCapture(dest);
     selectedPieceHasMoved = false;
     selectedPieceIndex = -1;
     drawBoard();
+    
+    var user1Pieces;
+    var user2Pieces;
+    var user1CapturedPieces;
+    var user2CapturedPieces;
+    
+    var flippedOpponentPieces = invertPieceLocations(oPieces);
+
+    if(user1Name === $.cookie('user')) {
+        user1Pieces = JSON.stringify(yPieces);
+        user2Pieces = JSON.stringify(flippedOpponentPieces);
+        user1CapturedPieces = JSON.stringify(yCapturedPieces);
+        user2CapturedPieces = JSON.stringify(oCapturedPieces);
+    }
+    else if (user2Name === $.cookie('user')) {
+        user1Pieces = JSON.stringify(flippedOpponentPieces);
+        user2Pieces = JSON.stringify(yPieces); 
+        user1CapturedPieces = JSON.stringify(oCapturedPieces);
+        user2CapturedPieces = JSON.stringify(yCapturedPieces);
+    }
+    var userTime = '\"userTime\": [{\"user1Time\":\"00:15:00\"},{\"user2Time\":\"00:15:00\"}]';
+    myturn = false;
+    send(user1Name, user2Name, user1Pieces, user2Pieces, user1CapturedPieces, user2CapturedPieces, userTime);
+    $('#reset').prop("disabled", true);
+    $('#send').prop("disabled", true);
+    $('#reset').val("Waiting for opponent's move...");
+    $('#send').val("Waiting for opponent's move...");
+    receiveData();
 }
 
 function invertPieceLocations(pieces) {
@@ -469,24 +509,83 @@ function invertPieceLocations(pieces) {
 }
 
 function invertPiece(piece) {
-    var x = piece.column;
-    var y = piece.row;
+    var x = piece.x;
+    var y = piece.y;
 
     
     if(x === 0)
-        piece.column = 7;
+        piece.x = 7;
     else if (x === 7)
-        piece.column = 0;
+        piece.x = 0;
     else
-        piece.column = 7 - x;
+        piece.x = 7 - x;
     
      if(y === 0)
-        piece.row = 7;
+        piece.y = 7;
     else if (y === 7)
-        piece.row = 0;
+        piece.y = 0;
     else
-        piece.row = 7 - y;
+        piece.y = 7 - y;
 
     
     return piece;
+}
+function receiveData() {
+    poll();
+}
+   
+function poll(){
+    
+    if(!myturn) {
+        alert(user1Name + ", " + user2Name);
+        var url = 'api/receive.php?user1=' + user1Name + '&user2=' + user2Name;
+
+        setTimeout(function(){
+          $.ajax({ 
+              url: url, 
+              success: function(data){
+                alert(JSON.stringify(data));
+                if(data.user1 === $.cookie('user')) {
+                    if(data.whosTurn === '0') {
+                        myturn = true;
+                        $('#reset').prop("disabled", false);
+                        $('#send').prop("disabled", false);
+                        $('#reset').val("Reset");
+                        $('#send').val("Send");
+                    }
+                }
+                else if(data.user2 === $.cookie('user')) {
+                    if(data.whosTurn === '1') {
+                        myturn = true;
+                        $('#reset').prop("disabled", false);
+                        $('#send').prop("disabled", false);
+                        $('#reset').val("Reset");
+                        $('#send').val("Send");
+                    }
+                }
+                else {
+                    //Setup the next poll recursively
+                    poll();
+                }
+              }, dataType: "json"});
+        }, 1000);
+    }
+    else {
+        var url = 'api/receive.php?user1=' + user1Name + '&user2=' + user2Name;
+
+        setTimeout(function(){
+          $.ajax({ 
+              url: url, 
+              success: function(data){
+                alert(data);
+                if(data === true) {
+                    location.reload();
+                }
+                else {
+                    //Setup the next poll recursively
+                    poll();
+                }
+              }, dataType: "json"});
+        }, 1000);
+    }
 }
