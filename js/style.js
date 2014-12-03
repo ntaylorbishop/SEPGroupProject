@@ -8,6 +8,10 @@ function logoutBtn(username) {
 	window.location = "index.php";
 }
 
-function connectPlayers(user1, user2) {
-	//Call to API connect players here
-}
+$(document).keypress(function(e) {
+    if(e.which == 13) {
+        if($("#userN").is(":focus")) {
+        	loginBtn($("#userN").val());
+        }
+    }
+});
