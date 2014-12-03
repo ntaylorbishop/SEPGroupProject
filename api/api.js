@@ -161,7 +161,7 @@ function getBasicInfo(username) {
         async: false,
         contentType: 'application/json',
         success: function(result,status,xhr) {
-            alert(JSON.stringify(result));
+            //alert(JSON.stringify(result));
             //return result;
         },
         error: function (jqXHR, textStatus, errorThrown) {

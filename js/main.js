@@ -11,16 +11,16 @@ var gCanvasElement;
 var gDrawingContext;
 var gPattern;
 
-var oPieces;
+var oPieces = [];
 var oCapturedPieces = new Array();
-var oColor = 'B';
+var oColor;
 var oNumPieces;
 
-var yPieces;
+var yPieces = [];
 var yDest;
 var yMovedPieces = new Array();
 var yCapturedPieces = new Array();
-var yColor = 'W';
+var yColor;
 var yNumPieces;
 var selectedPieceIndex;
 var selectedPieceHasMoved;
@@ -202,29 +202,43 @@ if (typeof resumeGame !== "function") {
 
 function newGame() {
     
-    var info = getBasicInfo($.cookie('user'));
-    alert(info);
-    
-    
-    
-    
-    
-    oPieces = [new Piece(0, 0, 'R'), new Piece(1, 0, 'N'), new Piece(2, 0, 'B'), new Piece(3, 0, 'K'), 
-               new Piece(4, 0, 'Q'), new Piece(5, 0, 'B'), new Piece(6, 0, 'N'), new Piece(7, 0, 'R'), 
+    var info = JSON.parse(getBasicInfo($.cookie('user')));
+    if(info.user1 === $.cookie('user')) {
+        yColor = 'W';
+        oColor = 'B';
+        
+        var myPieces = JSON.parse(info.user1Pieces);
+        for(var i = 0; i < myPieces.length; i++) {
+            yPieces.push(new Piece(myPieces[i].x, myPieces[i].y, myPieces[i].pieceType));
+        }   
+        var enemyPieces = JSON.parse(info.user2Pieces);
+        for(var i = 0; i < enemyPieces.length; i++) {
+            oPieces.push(new Piece(enemyPieces[i].x, enemyPieces[i].y, enemyPieces[i].pieceType));
+        }   
+        
+        oPieces = invertPieceLocations(oPieces);
+        
+    }
+    else {
+        yColor = 'B';
+        oColor = 'W';
+        
+        var myPieces = JSON.parse(info.user2Pieces);
+        for(var i = 0; i < myPieces.length; i++) {
+            yPieces.push(new Piece(myPieces[i].x, myPieces[i].y, myPieces[i].pieceType));
+        }
+        var enemyPieces = JSON.parse(info.user1Pieces);
+        for(var i = 0; i < enemyPieces.length; i++) {
+            oPieces.push(new Piece(enemyPieces[i].x, enemyPieces[i].y, enemyPieces[i].pieceType));
+        } 
+        
+        oPieces = invertPieceLocations(oPieces);
 
-               new Piece(0, 1, 'P'), new Piece(1, 1, 'P'), new Piece(2, 1, 'P'), new Piece(3, 1, 'P'),
-               new Piece(4, 1, 'P'), new Piece(5, 1, 'P'), new Piece(6, 1, 'P'), new Piece(7, 1, 'P')];
-
-    h = kBoardHeight;
-    oNumPieces = 16;
-
-    yPieces = [new Piece(0, h - 1, 'R'), new Piece(1, h - 1, 'N'), new Piece(2, h - 1, 'B'), new Piece(3, h - 1, 'Q'),
-               new Piece(4, h - 1, 'K'), new Piece(5, h - 1, 'B'), new Piece(6, h - 1, 'N'), new Piece(7, h - 1, 'R'),
-
-               new Piece(0, h - 2, 'P'), new Piece(1, h - 2, 'P'), new Piece(2, h - 2, 'P'), new Piece(3, h - 2, 'P'),
-               new Piece(4, h - 2, 'P'), new Piece(5, h - 2, 'P'), new Piece(6, h - 2, 'P'), new Piece(7, h - 2, 'P')];
-
-    yNumPieces = 16;
+    }
+    
+    yNumPieces = yPieces.length;
+    oNumPieces = oPieces.length;
+    
     selectedPieceIndex = -1;
     selectedPieceHasMoved = false;
     gGameInProgress = true;
@@ -445,14 +459,30 @@ function invertPieceLocations(pieces) {
     for(var i = 0; i < pieces.length; i++) {
         pieces[i] = invertPiece(pieces[i]);
     }
+    return pieces;
 }
 
 function invertPiece(piece) {
     var x = piece.column;
     var y = piece.row;
+
+    alert(x + ", " + y);
     
-    piece.column = 7 % x;
-    piece.row = 7 % y;
+    if(x === 0)
+        piece.column = 7;
+    else if (x === 7)
+        piece.column = 0;
+    else
+        piece.column = 7 - x;
+    
+     if(y === 0)
+        piece.row = 7;
+    else if (y === 7)
+        piece.row = 0;
+    else
+        piece.row = 7 - y;
+
+    alert(piece.column + ", " + piece.row);
     
     return piece;
 }

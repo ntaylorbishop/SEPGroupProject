@@ -7,39 +7,39 @@ $user2 = $userData->user2;
 
 try {
     $db = dbconnect();
-    $user1Pieces =  '[{"pieceType":"P", "x":0, "y":6},
-                     {"pieceType":"P", "x":1, "y":6},
-                     {"pieceType":"P", "x":2, "y":6},
-                     {"pieceType":"P", "x":3, "y":6},
-                     {"pieceType":"P", "x":4, "y":6},
-                     {"pieceType":"P", "x":5, "y":6},
-                     {"pieceType":"P", "x":6, "y":6},
-                     {"pieceType":"P", "x":7, "y":6},
-                     {"pieceType":"R", "x":0, "y":7},
-                     {"pieceType":"K", "x":1, "y":7},
-                     {"pieceType":"B", "x":2, "y":7},
-                     {"pieceType":"Q", "x":3, "y":7},
-                     {"pieceType":"K", "x":4, "y":7},
-                     {"pieceType":"B", "x":5, "y":7},
-                     {"pieceType":"K", "x":6, "y":7},
-                     {"pieceType":"R", "x":7, "y":7}]';
+    $user1Pieces =  '[{"pieceType":"P", "x":0, "y":6},' .
+                    '{"pieceType":"P", "x":1, "y":6},' .
+                    '{"pieceType":"P", "x":2, "y":6},' .
+                    '{"pieceType":"P", "x":3, "y":6},' .
+                    '{"pieceType":"P", "x":4, "y":6},' .
+                    '{"pieceType":"P", "x":5, "y":6},' .
+                    '{"pieceType":"P", "x":6, "y":6},' .
+                    '{"pieceType":"P", "x":7, "y":6},' .
+                    '{"pieceType":"R", "x":0, "y":7},' .
+                    '{"pieceType":"N", "x":1, "y":7},' .
+                    '{"pieceType":"B", "x":2, "y":7},' .
+                    '{"pieceType":"Q", "x":3, "y":7},' .
+                    '{"pieceType":"K", "x":4, "y":7},' .
+                    '{"pieceType":"B", "x":5, "y":7},' .
+                    '{"pieceType":"N", "x":6, "y":7},' .
+                    '{"pieceType":"R", "x":7, "y":7}]';
 
-    $user2Pieces =  '[{"pieceType":"P", "x":0, "y":6},
-                     {"pieceType":"P", "x":1, "y":6},
-                     {"pieceType":"P", "x":2, "y":6},
-                     {"pieceType":"P", "x":3, "y":6},
-                     {"pieceType":"P", "x":4, "y":6},
-                     {"pieceType":"P", "x":5, "y":6},
-                     {"pieceType":"P", "x":6, "y":6},
-                     {"pieceType":"P", "x":7, "y":6},
-                     {"pieceType":"R", "x":0, "y":7},
-                     {"pieceType":"K", "x":1, "y":7},
-                     {"pieceType":"B", "x":2, "y":7},
-                     {"pieceType":"K", "x":3, "y":7},
-                     {"pieceType":"Q", "x":4, "y":7},
-                     {"pieceType":"B", "x":5, "y":7},
-                     {"pieceType":"K", "x":6, "y":7},
-                     {"pieceType":"R", "x":7, "y":7}]';
+    $user2Pieces =  '[{"pieceType":"P", "x":0, "y":6},' .
+                    '{"pieceType":"P", "x":1, "y":6},' .
+                    '{"pieceType":"P", "x":2, "y":6},' .
+                    '{"pieceType":"P", "x":3, "y":6},' .
+                    '{"pieceType":"P", "x":4, "y":6},' .
+                    '{"pieceType":"P", "x":5, "y":6},' .
+                    '{"pieceType":"P", "x":6, "y":6},' .
+                    '{"pieceType":"P", "x":7, "y":6},' .
+                    '{"pieceType":"R", "x":0, "y":7},' .
+                    '{"pieceType":"N", "x":1, "y":7},' .
+                    '{"pieceType":"B", "x":2, "y":7},' .
+                    '{"pieceType":"K", "x":3, "y":7},' .
+                    '{"pieceType":"Q", "x":4, "y":7},' .
+                    '{"pieceType":"B", "x":5, "y":7},' .
+                    '{"pieceType":"N", "x":6, "y":7},' .
+                    '{"pieceType":"R", "x":7, "y":7}]';
 
     $sqlUser = "INSERT INTO Whos_Playing 
                     VALUES(:user1, :user2, :user1Pieces, :user2Pieces, '', '', '00:15:00', '00:15:00', 0, 1)";
