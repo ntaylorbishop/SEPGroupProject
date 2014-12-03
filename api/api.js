@@ -171,7 +171,7 @@ function getBasicInfo(username) {
     return info.responseText;
 }
 
-function endGame(user2) {
+function forfeitGame(user2) {
     alert("TEST");
     var user1 = $.cookie('user');
     alert(user1 + ", " + user2);

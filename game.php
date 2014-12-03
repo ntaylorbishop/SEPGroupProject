@@ -36,13 +36,13 @@
             <br />
             <div id="boardContainer">
                 <input id="reset" type="button" onclick="resetMove()" value="Reset" />
-                <input id="send" TYPE="button" onclick="sendMove()" value="Send" />
+                <input id="send" type="button" onclick="sendMove()" value="Send" />
                 <br/>
                 <br/>
                 <div id="uChessClock">(Timer Placeholder)</div>
                 <p id="uname"></p>
                 <div id="endBtn">
-                    <input id="end" type="button" value="Forfeit" onclick="alert('test')" />
+                    <input id="end" type="button" value="Forfeit" onclick="forfeitGame(enemyName)" />
                 </div>
             </div>
         </div>
