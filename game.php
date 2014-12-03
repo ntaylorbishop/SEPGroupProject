@@ -31,13 +31,15 @@
             </header>
         </div>
         <div id="container">
+            <p id="ename"></p>
+            <br />
+            <p id="eChessClock">(Timer Placeholder)</p>
             <div id="boardContainer">
-                <div id="eChessClock">Timer Placeholder</div>
-                <div id="uChessClock">Timer Placeholder</div>
                 <input id="reset" type="button" onclick="resetMove()" value="Reset" />
                 <input id="send" TYPE="button" onclick="sendMove()" value="Send" />
                 <br/>
                 <br/>
+                <p id="uChessClock">(Timer Placeholder)</div>
                 <p id="uname"></p>
                 <div id="endBtn">
                 <?php

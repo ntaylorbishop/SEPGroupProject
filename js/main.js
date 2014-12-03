@@ -207,6 +207,9 @@ function newGame() {
         yColor = 'W';
         oColor = 'B';
         
+        $('#uname').html(info.user1);
+        $('#ename').html(info.user2);
+        
         var myPieces = JSON.parse(info.user1Pieces);
         for(var i = 0; i < myPieces.length; i++) {
             yPieces.push(new Piece(myPieces[i].x, myPieces[i].y, myPieces[i].pieceType));
@@ -223,6 +226,9 @@ function newGame() {
         yColor = 'B';
         oColor = 'W';
         
+        $('#uname').html(info.user2);
+        $('#ename').html(info.user1);
+        
         var myPieces = JSON.parse(info.user2Pieces);
         for(var i = 0; i < myPieces.length; i++) {
             yPieces.push(new Piece(myPieces[i].x, myPieces[i].y, myPieces[i].pieceType));
@@ -235,6 +241,7 @@ function newGame() {
         oPieces = invertPieceLocations(oPieces);
 
     }
+    
     
     yNumPieces = yPieces.length;
     oNumPieces = oPieces.length;
@@ -256,12 +263,6 @@ function initGame(canvasElement) {
 	    canvasElement.id = "chess_canvas";
 	    $('#boardContainer').prepend(canvasElement);
         $('#chess_canvas').css({"margin-left":"auto", "margin-right":"auto", "display":"block","text-align":"center"});
-        var ename = document.createElement("p");
-        ename.id = "ename";
-        $('#boardContainer').prepend(ename);
-        $('p#ename').css({"margin-left":"auto", "margin-right":"auto", "text-align":"center"});
-        $('p#ename').text("TBGeorge");
-
     }
 
     gCanvasElement = canvasElement;
