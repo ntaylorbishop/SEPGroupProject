@@ -168,7 +168,7 @@ function getBasicInfo(username) {
             alert("Something went wrong\n" + textStatus + ": " + errorThrown);
         }
     });
-    return info;
+    return info.responseText;
 }
 
 function endGame(user1, user2) {
