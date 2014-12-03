@@ -42,9 +42,7 @@
                 <div id="uChessClock">(Timer Placeholder)</div>
                 <p id="uname"></p>
                 <div id="endBtn">
-                <?php
-                    echo '<input id="end" type="button" value="Forfeit" onclick="endGame("' . $_COOKIE['user'] . '")" />';
-                ?>
+                    <input id="end" type="button" value="Forfeit" onclick="alert('test')" />
                 </div>
             </div>
         </div>

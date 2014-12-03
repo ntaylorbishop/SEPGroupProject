@@ -171,7 +171,10 @@ function getBasicInfo(username) {
     return info.responseText;
 }
 
-function endGame(user1, user2) {
+function endGame(user2) {
+    alert("TEST");
+    var user1 = $.cookie('user');
+    alert(user1 + ", " + user2);
     var url = "api/endGame.php";
     var json = "user1=" + user1 + "&user2=" + user2;
 
@@ -179,7 +182,6 @@ function endGame(user1, user2) {
         type: 'GET',
         url: url,
         data: json,
-        dataType: "json",
         async: false,
         contentType: 'application/json',
         success: function(result,status,xhr) {

@@ -11,6 +11,7 @@ var gCanvasElement;
 var gDrawingContext;
 var gPattern;
 
+var enemyName;
 var oPieces = [];
 var oCapturedPieces = new Array();
 var oColor;
@@ -207,6 +208,8 @@ function newGame() {
         yColor = 'W';
         oColor = 'B';
         
+        enemyName = info.user2;
+        
         $('#uname').html(info.user1);
         $('#ename').html(info.user2);
         
@@ -225,6 +228,8 @@ function newGame() {
     else {
         yColor = 'B';
         oColor = 'W';
+        
+        enemyName = info.user1;
         
         $('#uname').html(info.user2);
         $('#ename').html(info.user1);
@@ -467,7 +472,6 @@ function invertPiece(piece) {
     var x = piece.column;
     var y = piece.row;
 
-    alert(x + ", " + y);
     
     if(x === 0)
         piece.column = 7;
@@ -483,7 +487,6 @@ function invertPiece(piece) {
     else
         piece.row = 7 - y;
 
-    alert(piece.column + ", " + piece.row);
     
     return piece;
 }
