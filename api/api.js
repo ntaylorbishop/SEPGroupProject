@@ -173,17 +173,17 @@ function getBasicInfo(username) {
 
 function endGame(user1, user2) {
     var url = "api/endGame.php";
-    var json = '{"user1":"' + user1 + '", "user2":"' + user2 + '"}';
+    var json = "user1=" + user1 + "&user2=" + user2;
 
     $.ajax({
-        type: 'POST',
+        type: 'GET',
         url: url,
         data: json,
         dataType: "json",
         async: false,
         contentType: 'application/json',
         success: function(result,status,xhr) {
-            alert("C.R.E.A.M. get da money");
+            window.location = "index.php";
         },
         error: function (jqXHR, textStatus, errorThrown) {
             alert("Something went wrong\n" + textStatus + ": " + errorThrown);

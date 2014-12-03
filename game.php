@@ -40,7 +40,9 @@
                 <br/>
                 <p id="uname"></p>
                 <div id="endBtn">
-                    <input id="end" type="button" value="Forfeit" />
+                <?php
+                    echo '<input id="end" type="button" value="Forfeit" onclick="endGame("' . $_COOKIE['user'] . '")" />';
+                ?>
                 </div>
             </div>
         </div>
