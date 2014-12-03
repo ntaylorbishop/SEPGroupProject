@@ -265,6 +265,10 @@ function newGame() {
     drawBoard();
     
     if(!myturn) {
+        $('#reset').prop("disabled", true);
+        $('#send').prop("disabled", true);
+        $('#reset').val("Waiting for opponent's move...");
+        $('#send').val("Waiting for opponent's move...");
         receiveData();
     }
 }
@@ -491,8 +495,8 @@ function sendMove() {
         user1CapturedPieces = JSON.stringify(oCapturedPieces);
         user2CapturedPieces = JSON.stringify(yCapturedPieces);
     }
-    console.log(user1Pieces);
     var userTime = '\"userTime\": [{\"user1Time\":\"00:15:00\"},{\"user2Time\":\"00:15:00\"}]';
+    
     myturn = false;
     send(user1Name, user2Name, user1Pieces, user2Pieces, user1CapturedPieces, user2CapturedPieces, userTime);
     $('#reset').prop("disabled", true);
@@ -552,7 +556,11 @@ function poll(){
                         $('#send').prop("disabled", false);
                         $('#reset').val("Reset");
                         $('#send').val("Send");
+                        loadPieces(data);
+                        poll();
                     }
+                    else
+                        poll();
                 }
                 else if(data.user2 === $.cookie('user')) {
                     if(data.whosTurn === '1') {
@@ -561,10 +569,14 @@ function poll(){
                         $('#send').prop("disabled", false);
                         $('#reset').val("Reset");
                         $('#send').val("Send");
+                        loadPieces(data);
+                        poll();
+                    }
+                    else {
+                        poll();
                     }
                 }
                 else {
-                    //Setup the next poll recursively
                     poll();
                 }
               }, dataType: "json"});
@@ -579,13 +591,74 @@ function poll(){
               success: function(data){
                 console.log(data);
                 if(data === true) {
+                    alert("The game is over.");
                     location.reload();
                 }
                 else {
-                    //Setup the next poll recursively
                     poll();
                 }
               }, dataType: "json"});
         }, 1000);
     }
+}
+
+function loadPieces(info) {
+    //alert(JSON.stringify(info));
+    
+    yPieces = [];
+    oPieces = [];
+    yCapturedPieces = [];
+    oCapturedPieces = [];
+    
+    if(info.user1 === $.cookie('user')) {        
+        
+        var myPieces = JSON.parse(info.user1Pieces);
+        for(var i = 0; i < myPieces.length; i++) {
+            yPieces.push(new Piece(myPieces[i].x, myPieces[i].y, myPieces[i].pieceType));
+        }   
+        var enemyPieces = JSON.parse(info.user2Pieces);
+        for(var i = 0; i < enemyPieces.length; i++) {
+            oPieces.push(new Piece(enemyPieces[i].x, enemyPieces[i].y, enemyPieces[i].pieceType));
+        }   
+        
+        var myCapturedPieces = JSON.parse(info.user1CapturedPieces);
+        for(var i = 0; i < myCapturedPieces.length; i++) {
+            yCapturedPieces.push(new Piece(myCapturedPieces[i].x, myCapturedPieces[i].y, myCapturedPieces[i].pieceType));
+        } 
+        
+        var enemyCapturedPieces = JSON.parse(info.user2CapturedPieces);
+        for(var i = 0; i < enemyCapturedPieces.length; i++) {
+            oCapturedPieces.push(new Piece(enemyCapturedPieces[i].x, enemyCapturedPieces[i].y, enemyCapturedPieces[i].pieceType));
+        } 
+        oPieces = invertPieceLocations(oPieces);
+        
+    }
+    else {        
+        var myPieces = JSON.parse(info.user2Pieces);
+        for(var i = 0; i < myPieces.length; i++) {
+            yPieces.push(new Piece(myPieces[i].x, myPieces[i].y, myPieces[i].pieceType));
+        }
+        var enemyPieces = JSON.parse(info.user1Pieces);
+        for(var i = 0; i < enemyPieces.length; i++) {
+            oPieces.push(new Piece(enemyPieces[i].x, enemyPieces[i].y, enemyPieces[i].pieceType));
+        } 
+        var myCapturedPieces = JSON.parse(info.user2CapturedPieces);
+        for(var i = 0; i < myCapturedPieces.length; i++) {
+            yCapturedPieces.push(new Piece(myCapturedPieces[i].x, myCapturedPieces[i].y, myCapturedPieces[i].pieceType));
+        } 
+        
+        var enemyCapturedPieces = JSON.parse(info.user1CapturedPieces);
+        for(var i = 0; i < enemyCapturedPieces.length; i++) {
+            oCapturedPieces.push(new Piece(enemyCapturedPieces[i].x, enemyCapturedPieces[i].y, enemyCapturedPieces[i].pieceType));
+        } 
+        
+        oPieces = invertPieceLocations(oPieces);
+
+    }
+    
+    yNumPieces = yPieces.length;
+    oNumPieces = oPieces.length;
+    
+    drawBoard();
+    
 }
