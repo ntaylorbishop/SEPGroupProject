@@ -43,7 +43,7 @@
                 <div id="uChessClock">(Timer Placeholder)</div>
                 <p id="uname"></p>
                 <div id="endBtn">
-                    <input id="end" type="button" value="Forfeit" onclick="forfeitGame(enemyName)" />
+                    <input id="end" type="button" value="Forfeit" onclick="forfeitGame(user1Name, user2Name)" />
                 </div>
             </div>
         </div>
