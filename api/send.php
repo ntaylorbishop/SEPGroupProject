@@ -7,8 +7,8 @@ $user1 = $jsonInfo['usernames'][0]['user1'];
 $user2 = $jsonInfo['usernames'][1]['user2'];
 $user1Pieces = json_encode($jsonInfo['user1Pieces']);
 $user2Pieces = json_encode($jsonInfo['user2Pieces']);
-$user1CapturedPieces = json_encode($jsonInfo['user2Pieces']);
-$user2CapturedPieces = json_encode($jsonInfo['user2Pieces']);
+$user1CapturedPieces = json_encode($jsonInfo['user1CapturedPieces']);
+$user2CapturedPieces = json_encode($jsonInfo['user2CapturedPieces']);
 $user1Time = $jsonInfo['userTime'][0]['user1Time'];
 $user2Time = $jsonInfo['userTime'][1]['user2Time'];
 

@@ -491,6 +491,7 @@ function sendMove() {
         user1CapturedPieces = JSON.stringify(oCapturedPieces);
         user2CapturedPieces = JSON.stringify(yCapturedPieces);
     }
+    console.log(user1Pieces);
     var userTime = '\"userTime\": [{\"user1Time\":\"00:15:00\"},{\"user2Time\":\"00:15:00\"}]';
     myturn = false;
     send(user1Name, user2Name, user1Pieces, user2Pieces, user1CapturedPieces, user2CapturedPieces, userTime);
@@ -537,14 +538,13 @@ function receiveData() {
 function poll(){
     
     if(!myturn) {
-        alert(user1Name + ", " + user2Name);
         var url = 'api/receive.php?user1=' + user1Name + '&user2=' + user2Name;
 
         setTimeout(function(){
           $.ajax({ 
               url: url, 
               success: function(data){
-                alert(JSON.stringify(data));
+                console.log(JSON.stringify(data));
                 if(data.user1 === $.cookie('user')) {
                     if(data.whosTurn === '0') {
                         myturn = true;
@@ -571,13 +571,13 @@ function poll(){
         }, 1000);
     }
     else {
-        var url = 'api/receive.php?user1=' + user1Name + '&user2=' + user2Name;
+        var url = 'api/gameOver.php';
 
         setTimeout(function(){
           $.ajax({ 
               url: url, 
               success: function(data){
-                alert(data);
+                console.log(data);
                 if(data === true) {
                     location.reload();
                 }
