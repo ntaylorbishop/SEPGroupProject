@@ -3,7 +3,7 @@ require 'db_conn.php';
 $user1 = $_GET['user1'];
 $user2 = $_GET['user2'];
 
-$sql = "SELECT user1Pieces, user2Pieces, user1CapturedPieces, user2CapturedPieces, user1Time, user2Time, whosTurn 
+$sql = "SELECT user1, user2, user1Pieces, user2Pieces, user1CapturedPieces, user2CapturedPieces, user1Time, user2Time, whosTurn 
         FROM Whos_Playing 
         WHERE user1 = :user1 AND user2 = :user2";
 try {
