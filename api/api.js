@@ -111,9 +111,12 @@ function startGame(user1, user2) {
 }
 
 //Tyler's Stuff
-function send(user1, user2, user1Pieces, user2Pieces, user1CapturedPieces, user2CapturedPieces) {
+function send(user1, user2, user1Pieces, user2Pieces, user1CapturedPieces, user2CapturedPieces, userTime) {
     var url = "api/send.php";
-    var json = "user1=" + user1 + "&user2=" + user2;
+    var json = '{"usernames": [{"user1": "tbish"},{"user2": "tbgeorge"}],'
+               + user1Pieces + ',' + user2Pieces + ','
+               + user1CapturedPieces + ',' + user2CapturedPieces + ','
+               + userTime + '}';
 
     $.ajax({
         type: 'POST',
@@ -122,9 +125,6 @@ function send(user1, user2, user1Pieces, user2Pieces, user1CapturedPieces, user2
         dataType: "json",
         async: false,
         contentType: 'application/json',
-        success: function(result,status,xhr) {
-            alert(JSON.stringify(result));
-        },
         error: function (jqXHR, textStatus, errorThrown) {
             alert("Something went wrong\n" + textStatus + ": " + errorThrown);
         }
