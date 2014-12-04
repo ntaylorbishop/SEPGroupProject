@@ -117,7 +117,7 @@ function send(user1, user2, user1Pieces, user2Pieces, user1CapturedPieces, user2
                + '\"user1Pieces\":' + user1Pieces + ',\"user2Pieces\":' + user2Pieces + ','
                + '\"user1CapturedPieces\":' + user1CapturedPieces + ',\"user2CapturedPieces\":' + user2CapturedPieces + ','
                + userTime + '}';
-    console.log(json);
+//    console.log(json);
 
     $.ajax({
         type: 'POST',

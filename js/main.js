@@ -17,6 +17,7 @@ var user1Name;
 var user2Name;
 
 var kingInCheck;
+var recentlyCaptured;
 
 var oPieces = [];
 var oCapturedPieces = new Array();
@@ -73,9 +74,9 @@ function clickOnCell(e) {
     for (var i = 0; i < yNumPieces; i++) {
     	if ((yPieces[i].y === cell.y) && (yPieces[i].x === cell.x)) {
             selectedPieceIndex = i;
-            if(kingInCheck && yPieces[selectedPieceIndex].pieceType !== 'K') {
-                selectedPieceIndex = -1;
-            }
+//            if(kingInCheck && yPieces[selectedPieceIndex].pieceType !== 'K') {
+//                selectedPieceIndex = -1;
+//            }
     	    drawBoard();
     	    return;
     	}
@@ -320,9 +321,11 @@ function checkForCapture(cell) {
             }
         }
         yCapturedPieces.push(new Piece(oPieces[enemyPieceIndex].x, oPieces[enemyPieceIndex].y, oPieces[enemyPieceIndex].pieceType));
+        recentlyCaptured = new Piece(oPieces[enemyPieceIndex].x, oPieces[enemyPieceIndex].y, oPieces[enemyPieceIndex].pieceType);
         oPieces.splice(enemyPieceIndex, 1);
         oNumPieces--;
     }
+    else recentlyCaptured = null;
 }
 
 function isEnemyPieceAt(x, y) {
@@ -476,11 +479,51 @@ function resetMove() {
     drawBoard();
 }
 
+function resetBadMove(previousPieces) {
+    selectedPieceHasMoved = false;
+    selectedPieceIndex = -1;
+    for(var i = 0; i < yPieces.length; i++) 
+        yPieces[i] = new Piece(previousPieces[i].x, previousPieces[i].y, previousPieces[i].pieceType);
+    if(recentlyCaptured !== null) {
+        oPieces.push(recentlyCaptured);
+        var yCap = [];
+        for(var i = 0; i < yCapturedPieces.length; i++) {
+            if(!(yCapturedPieces[i].x === recentlyCaptured.x && yCapturedPieces[i].y === recentlyCaptured.y && yCapturedPieces[i].pieceType === recentlyCaptured.pieceType))
+                yCap.push(new Piece(previousPieces[i].x, previousPieces[i].y, previousPieces[i].pieceType));
+        }
+        yCapturedPieces = new Array();
+        for(var i = 0; i < yCap.length; i++) {
+            yCapturedPieces.push(new Piece(yCap[i].x, yCap[i].y, yCap[i].pieceType));
+        }
+        yCap = new Array();
+    }
+    dest = null;
+    drawBoard();
+}
+
 function sendMove() {
+    var currentPieceLocations = [];
+    for(var i = 0; i < yPieces.length; i++) 
+        currentPieceLocations.push(new Piece(yPieces[i].x, yPieces[i].y, yPieces[i].pieceType));
+    
+    //yPieces = new Array();
     for(var i = 0; i < yPieces.length; i++) 
         yPieces[i] = new Piece(yMovedPieces[i].x, yMovedPieces[i].y, yMovedPieces[i].pieceType);
     yMovedPieces = new Array();
+    
     checkForCapture(dest);
+
+
+    if(isKingInCheck()) {
+        alert("Your move puts/leaves you in check, please make a different one");
+        resetBadMove(currentPieceLocations);
+        kingInCheck = true;
+        return;
+    }
+    else kingInCheck = false;
+    
+    
+    console.log("Send Move");
     selectedPieceHasMoved = false;
     selectedPieceIndex = -1;
     drawBoard();
@@ -527,7 +570,7 @@ function invertPiece(piece) {
     var x = piece.x;
     var y = piece.y;
 
-    
+//    console.log('Uninverted: ' + x + ', ' + y);
     if(x === 0)
         piece.x = 7;
     else if (x === 7)
@@ -542,7 +585,7 @@ function invertPiece(piece) {
     else
         piece.y = 7 - y;
 
-    
+//    console.log('Inverted: ' + piece.x + ', ' + piece.y);
     return piece;
 }
 function receiveData() {
@@ -583,7 +626,6 @@ function poll(){
                         }
                         else {
                             kingInCheck = false;
-                            alert("King not in check");
                         }
                         poll();
                     }
@@ -711,7 +753,7 @@ function drawCapturedPieces() {
         var imgElement = document.createElement("img");
         imgElement.id = "eCapturedPiece" + i;
         imgElement.src = "img/chesspieces/" + yColor.toLowerCase() + oCapturedPieces[i].pieceType + ".png";
-        console.log(imgElement.src);
+//        console.log(imgElement.src);
         eCapturedPieces.prepend(imgElement);
     }
     
@@ -721,7 +763,7 @@ function drawCapturedPieces() {
         var imgElement = document.createElement("img");
         imgElement.id = "uCapturedPiece" + i;
         imgElement.src = "img/chesspieces/" + oColor.toLowerCase() + yCapturedPieces[i].pieceType + ".png";
-        console.log(imgElement.src);
+//        console.log(imgElement.src);
         uCapturedPieces.prepend(imgElement);
     }
 }
@@ -769,33 +811,69 @@ function isKingInCheckMate() {
 }
 
 function inCheck(dest) {
+//    alert('King\'s Location: ' + JSON.stringify(dest));
+    
+    var destInverted = invertPiece(new Cell(dest.x, dest.y));
+    oPieces = invertPieceLocations(oPieces);
+    yPieces = invertPieceLocations(yPieces);
+//    for(var i = 0; i < oPieces.length; i++)
+//        oPiecesInverted.push(new Piece(oPieces[i].x, oPieces[i].y, oPieces[i].pieceType));
+//    oPiecesInverted = invertPieceLocations(oPiecesInverted);
     
     for(var i = 0; i < oPieces.length; i++) {
+//        console.log('Piece location: ' + JSON.stringify(oPiecesInverted[i]));
         if(oPieces[i].pieceType === 'P') {
-            alert("PAWN");
-            if(checkValidPawnMove(oPieces[i], dest))
+//            console.log("Valid pawn move: " + checkValidPawnMove(oPiecesInverted[i], destInverted));
+            if(checkValidPawnMove(oPieces[i], destInverted)) { 
+                oPieces = invertPieceLocations(oPieces);
+                yPieces = invertPieceLocations(yPieces);
                 return true;
+            }
         }
         else if(oPieces[i].pieceType === 'R') {
-            if(checkValidRookMove(oPieces[i], dest))
+//            console.log("Valid rook move: " + checkValidRookMove(oPiecesInverted[i], destInverted));
+            if(checkValidRookMove(oPieces[i], destInverted)) {
+                oPieces = invertPieceLocations(oPieces);
+                yPieces = invertPieceLocations(yPieces);
                 return true;
+            }
         }
         else if(oPieces[i].pieceType === 'B') {
-            if(checkValidBishopMove(oPieces[i], dest))
+//            console.log("Valid bishop move: " + checkValidBishopMove(oPiecesInverted[i], destInverted));
+            if(checkValidBishopMove(oPieces[i], destInverted)) {
+                oPieces = invertPieceLocations(oPieces);
+                yPieces = invertPieceLocations(yPieces);
                 return true;
+            }
         }
         else if(oPieces[i].pieceType === 'N') {
-            if(checkValidKnightMove(oPieces[i], dest))
+//            console.log("Valid kngiht move: " + checkValidKnightMove(oPiecesInverted[i], destInverted));
+            if(checkValidKnightMove(oPieces[i], destInverted)) {
+                oPieces = invertPieceLocations(oPieces);
+                yPieces = invertPieceLocations(yPieces);
                 return true;
+            }
         }
         else if(oPieces[i].pieceType === 'K') {
-            if(checkValidKingMove(oPieces[i], dest))
+//            console.log("Valid king move: " + checkValidKingMove(oPiecesInverted[i], destInverted));
+            if(checkValidKingMove(oPieces[i], destInverted)) {
+                oPieces = invertPieceLocations(oPieces);
+                yPieces = invertPieceLocations(yPieces);
                 return true;
+            }
         }
         else if(oPieces[i].pieceType === 'Q') {
-            if(checkValidQueenMove(oPieces[i], dest))
+            console.log('Your King\'s location: ' + JSON.stringify(destInverted));
+            console.log('Opponent\'s Queen location: ' + JSON.stringify(oPieces[i]));
+            console.log("Valid queen move: " + checkValidQueenMove(oPieces[i], destInverted));
+            if(checkValidQueenMove(oPieces[i], destInverted)) {
+                oPieces = invertPieceLocations(oPieces);
+                yPieces = invertPieceLocations(yPieces);
                 return true;
+            }
         }
     }
+    oPieces = invertPieceLocations(oPieces);
+    yPieces = invertPieceLocations(yPieces);
     return false;    
 }
