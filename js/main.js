@@ -269,8 +269,8 @@ function newGame() {
         $('#send').prop("disabled", true);
         $('#reset').val("Waiting for opponent's move...");
         $('#send').val("Waiting for opponent's move...");
-        receiveData();
     }
+    receiveData();
 }
 
 function endGame() {
@@ -503,6 +503,7 @@ function sendMove() {
     $('#send').prop("disabled", true);
     $('#reset').val("Waiting for opponent's move...");
     $('#send').val("Waiting for opponent's move...");
+    drawCapturedPieces();
     receiveData();
 }
 
@@ -548,7 +549,13 @@ function poll(){
           $.ajax({ 
               url: url, 
               success: function(data){
-                console.log(JSON.stringify(data));
+//                console.log(JSON.stringify(data));
+                if(data.hasOwnProperty("error")) {
+                    if(data.error === true) {
+                        alert("The game is over.");
+                        location.reload();
+                    }
+                }
                 if(data.user1 === $.cookie('user')) {
                     if(data.whosTurn === '0') {
                         myturn = true;
@@ -589,7 +596,7 @@ function poll(){
           $.ajax({ 
               url: url, 
               success: function(data){
-                console.log(data);
+//                console.log(data);
                 if(data === true) {
                     alert("The game is over.");
                     location.reload();
@@ -659,6 +666,32 @@ function loadPieces(info) {
     yNumPieces = yPieces.length;
     oNumPieces = oPieces.length;
     
+    drawCapturedPieces();
     drawBoard();
     
+}
+
+function drawCapturedPieces() {
+    var eCapturedPieces = $('#eCapturedPieces');
+    var uCapturedPieces = $('#uCapturedPieces');
+    
+    var numOfEnemyPiecesRendered = $('#eCapturedPieces img').length;
+    
+    for(var i = numOfEnemyPiecesRendered; i < oCapturedPieces.length; i++) {
+        var imgElement = document.createElement("img");
+        imgElement.id = "eCapturedPiece" + i;
+        imgElement.src = "img/chesspieces/" + yColor.toLowerCase() + oCapturedPieces[i].pieceType + ".png";
+        console.log(imgElement.src);
+        eCapturedPieces.prepend(imgElement);
+    }
+    
+    var numOfPiecesRendered = $('#uCapturedPieces img').length;
+
+    for(var i = numOfPiecesRendered; i < yCapturedPieces.length; i++) {
+        var imgElement = document.createElement("img");
+        imgElement.id = "uCapturedPiece" + i;
+        imgElement.src = "img/chesspieces/" + oColor.toLowerCase() + yCapturedPieces[i].pieceType + ".png";
+        console.log(imgElement.src);
+        uCapturedPieces.prepend(imgElement);
+    }
 }

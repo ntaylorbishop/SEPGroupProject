@@ -34,12 +34,13 @@
         <div id="container">
             <p id="ename"></p>
             <div id="eChessClock">(Timer Placeholder)</div>
+            <div id="eCapturedPieces"></div>
             <br />
             <div id="boardContainer">
                 <input id="reset" type="button" onclick="resetMove()" value="Reset" />
                 <input id="send" type="button" onclick="sendMove()" value="Send" />
                 <br/>
-                <br/>
+                <div id="uCapturedPieces"></div>
                 <div id="uChessClock">(Timer Placeholder)</div>
                 <p id="uname"></p>
                 <div id="endBtn">
