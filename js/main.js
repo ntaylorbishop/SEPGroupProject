@@ -16,6 +16,8 @@ var myturn;
 var user1Name;
 var user2Name;
 
+var kingInCheck;
+
 var oPieces = [];
 var oCapturedPieces = new Array();
 var oColor;
@@ -71,6 +73,9 @@ function clickOnCell(e) {
     for (var i = 0; i < yNumPieces; i++) {
     	if ((yPieces[i].y === cell.y) && (yPieces[i].x === cell.x)) {
             selectedPieceIndex = i;
+            if(kingInCheck && yPieces[selectedPieceIndex].pieceType !== 'K') {
+                selectedPieceIndex = -1;
+            }
     	    drawBoard();
     	    return;
     	}
@@ -453,7 +458,11 @@ function checkValidKingMove(piece, dest) {
 
     if((piece.y === dest.y || piece.y === (dest.y + 1) || piece.y === (dest.y - 1))
      && (piece.x === dest.x || piece.x === (dest.x + 1) || piece.x === (dest.x - 1))) {
-        return true;
+        if(isPieceAt(dest.x, dest.y) && isEnemyPieceAt(dest.x, dest.y))
+            return true;
+        else if(isPieceAt(dest.x, dest.y) && !isEnemyPieceAt(dest.x, dest.y))
+            return false;
+        else return true;
     }
     
     return false;
@@ -564,6 +573,18 @@ function poll(){
                         $('#reset').val("Reset");
                         $('#send').val("Send");
                         loadPieces(data);
+                        if(isKingInCheck()) {
+                            if(isKingInCheckMate()) {
+                                alert("Your king is in check-mate, You Lose.");
+                                location.reload();
+                            }
+                            alert("Your king is in check, make sure to move him.");
+                            kingInCheck = true;
+                        }
+                        else {
+                            kingInCheck = false;
+                            alert("King not in check");
+                        }
                         poll();
                     }
                     else
@@ -577,6 +598,15 @@ function poll(){
                         $('#reset').val("Reset");
                         $('#send').val("Send");
                         loadPieces(data);
+                        if(isKingInCheck()) {
+                            if(isKingInCheckMate()) {
+                                alert("Your king is in check-mate, You Lose.");
+                                location.reload();
+                            }
+                            alert("Your king is in check, make sure to move him.");
+                            kingInCheck = true;
+                        }
+                        else kingInCheck = false;
                         poll();
                     }
                     else {
@@ -694,4 +724,78 @@ function drawCapturedPieces() {
         console.log(imgElement.src);
         uCapturedPieces.prepend(imgElement);
     }
+}
+
+function isKingInCheck() {
+    var king;
+    
+    for(var i = 0; i < yPieces.length; i++) {
+        if(yPieces[i].pieceType === 'K') {
+            king = yPieces[i];
+            break;
+        }
+    }
+    return inCheck(new Cell(king.x, king.y));
+}
+
+function isKingInCheckMate() {
+    var validKingMoves = [];
+    var king;
+    
+    for(var i = 0; i < yPieces.length; i++) {
+        if(yPieces[i].pieceType === 'K') {
+            king = yPieces[i];
+            break;
+        }
+    }
+    
+    for(var x = 0; x < kBoardWidth; x++) {
+        for(var y = 0; y < kBoardHeight; y++) {
+            var temp = new Cell(x, y);
+            if(checkValidKingMove(king, temp)) {
+                validKingMoves.push(temp); 
+            }
+        }
+    }
+    
+    var allPossibleMovesInCheck = true;
+    
+    for(var i = 0; i < validKingMoves.length; i++) {
+        if(!inCheck(validKingMoves[i])) {
+            allPossibleMovesInCheck = false;
+        }
+    } 
+    return allPossibleMovesInCheck;
+}
+
+function inCheck(dest) {
+    
+    for(var i = 0; i < oPieces.length; i++) {
+        if(oPieces[i].pieceType === 'P') {
+            alert("PAWN");
+            if(checkValidPawnMove(oPieces[i], dest))
+                return true;
+        }
+        else if(oPieces[i].pieceType === 'R') {
+            if(checkValidRookMove(oPieces[i], dest))
+                return true;
+        }
+        else if(oPieces[i].pieceType === 'B') {
+            if(checkValidBishopMove(oPieces[i], dest))
+                return true;
+        }
+        else if(oPieces[i].pieceType === 'N') {
+            if(checkValidKnightMove(oPieces[i], dest))
+                return true;
+        }
+        else if(oPieces[i].pieceType === 'K') {
+            if(checkValidKingMove(oPieces[i], dest))
+                return true;
+        }
+        else if(oPieces[i].pieceType === 'Q') {
+            if(checkValidQueenMove(oPieces[i], dest))
+                return true;
+        }
+    }
+    return false;    
 }
