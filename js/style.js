@@ -14,7 +14,7 @@ function logoutBtn(username) {
 }
 
 $(document).keypress(function(e) {
-    if(e.which == 13) {
+    if(e.which === 13) {
         if($("#userN").is(":focus")) {
         	loginBtn($("#userN").val());
         }

@@ -42,7 +42,7 @@ try {
                     '{"pieceType":"R", "x":7, "y":7}]';
 
     $sqlUser = "INSERT INTO Whos_Playing 
-                    VALUES(:user1, :user2, :user1Pieces, :user2Pieces, '', '', '00:15:00', '00:15:00', 0, 1)";
+                    VALUES(:user1, :user2, :user1Pieces, :user2Pieces, '[]', '[]', '15:00', '15:00', 0, 1)";
     $stmt = $db->prepare($sqlUser);
     $stmt->bindParam("user1", $user1);
     $stmt->bindParam("user2", $user2);

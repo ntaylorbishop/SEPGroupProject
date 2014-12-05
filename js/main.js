@@ -225,6 +225,9 @@ function newGame() {
         $('#uname').html(info.user1);
         $('#ename').html(info.user2);
         
+        $('#uChessClock').html(info.user1Time);
+        $('#eChessClock').html(info.user2Time);
+        
         var myPieces = JSON.parse(info.user1Pieces);
         for(var i = 0; i < myPieces.length; i++) {
             yPieces.push(new Piece(myPieces[i].x, myPieces[i].y, myPieces[i].pieceType));
@@ -247,6 +250,9 @@ function newGame() {
         
         $('#uname').html(info.user2);
         $('#ename').html(info.user1);
+        
+        $('#uChessClock').html(info.user2Time);
+        $('#eChessClock').html(info.user1Time);
         
         var myPieces = JSON.parse(info.user2Pieces);
         for(var i = 0; i < myPieces.length; i++) {
@@ -547,20 +553,27 @@ function sendMove() {
     
     var flippedOpponentPieces = invertPieceLocations(oPieces);
 
+    var user1Time, user2Time;
+    
     if(user1Name === $.cookie('user')) {
+        user1Time = $('#uChessClock').html();
+        user2Time = $('#eChessClock').html();
+
         user1Pieces = JSON.stringify(yPieces);
         user2Pieces = JSON.stringify(flippedOpponentPieces);
         user1CapturedPieces = JSON.stringify(yCapturedPieces);
         user2CapturedPieces = JSON.stringify(oCapturedPieces);
     }
     else if (user2Name === $.cookie('user')) {
+        user2Time = $('#uChessClock').html();
+        user1Time = $('#eChessClock').html();
+        
         user1Pieces = JSON.stringify(flippedOpponentPieces);
         user2Pieces = JSON.stringify(yPieces); 
         user1CapturedPieces = JSON.stringify(oCapturedPieces);
         user2CapturedPieces = JSON.stringify(yCapturedPieces);
     }
-    var userTime = '\"userTime\": [{\"user1Time\":\"00:15:00\"},{\"user2Time\":\"00:15:00\"}]';
-    
+    var userTime = '\"userTime\": [{\"user1Time\":\"' + user1Time + '\"},{\"user2Time\":\"' + user2Time + '\"}]';    
     myturn = false;
     send(user1Name, user2Name, user1Pieces, user2Pieces, user1CapturedPieces, user2CapturedPieces, userTime);
     $('#reset').prop("disabled", true);
@@ -568,7 +581,6 @@ function sendMove() {
     $('#reset').val("Waiting for opponent's move...");
     $('#send').val("Waiting for opponent's move...");
     drawCapturedPieces();
-    receiveData();
 }
 
 function invertPieceLocations(pieces) {
@@ -606,7 +618,7 @@ function receiveData() {
    
 function poll(){
     
-    if(!myturn) {
+    //if(!myturn) {
         var url = 'api/receive.php?user1=' + user1Name + '&user2=' + user2Name;
 
         setTimeout(function(){
@@ -620,8 +632,11 @@ function poll(){
                         location.reload();
                     }
                 }
+                
                 if(data.user1 === $.cookie('user')) {
-                    if(data.whosTurn === '0') {
+                    $('#uChessClock').html(data.user1Time);
+                    $('#eChessClock').html(data.user2Time);
+                    if(data.whosTurn === '0' && !myturn) {
                         myturn = true;
                         $('#reset').prop("disabled", false);
                         $('#send').prop("disabled", false);
@@ -647,11 +662,43 @@ function poll(){
                         }
                         poll();
                     }
-                    else
+                    else if(data.whosTurn === '0' && myturn) {
+                        var chessClock = $("#uChessClock");
+                        var myTime = chessClock.html();
+                        var ss = myTime.split(":");
+                        var dt = new Date();
+                        dt.setHours(0);
+                        dt.setMinutes(ss[0]);
+                        dt.setSeconds(ss[1]);
+                        var dt2 = new Date(dt.valueOf() - 1000);
+                        var temp = dt2.toTimeString().split(" ");
+                        var ts = temp[0].split(":");
+                        chessClock.html(ts[1]+":"+ts[2]);
+                        if(ts[1] === "00" && ts[2] === "00") {
+                            alert("Your timer ran out. You lose.");
+                            location.reload();
+                        }
+                        if(user1Name === $.cookie('user')) {
+                            var user1Time = $('#uChessClock').html();
+                            var user2Time = $('#eChessClock').html();
+    //                        var userTimes = '{\"user1Time\":\"' + user1Time + '\"},{\"user2Time\":\"' + user2Time + '\"}';
+                            sendTime($.cookie('user'), user1Time, user2Time);
+                        }
+                        else {
+                            var user1Time = $('#eChessClock').html();
+                            var user2Time = $('#uChessClock').html();
+    //                        var userTimes = '{\"user1Time\":\"' + user1Time + '\"},{\"user2Time\":\"' + user2Time + '\"}';
+                            sendTime($.cookie('user'), user1Time, user2Time);
+                        }
+                        poll();
+                    }
+                    else 
                         poll();
                 }
                 else if(data.user2 === $.cookie('user')) {
-                    if(data.whosTurn === '1') {
+                    $('#uChessClock').html(data.user2Time);
+                    $('#eChessClock').html(data.user1Time);
+                    if(data.whosTurn === '1' && !myturn) {
                         myturn = true;
                         $('#reset').prop("disabled", false);
                         $('#send').prop("disabled", false);
@@ -670,38 +717,92 @@ function poll(){
                             alert("Your king is in check, make sure to move him.");
                             kingInCheck = true;
                         }
-                        else kingInCheck = false;
+                        else {
+                            kingInCheck = false;
+                        }
                         poll();
                     }
-                    else {
+                    if(data.whosTurn === '1' && myturn) {
+                        var chessClock = $("#uChessClock");
+                        var myTime = chessClock.html();
+                        var ss = myTime.split(":");
+                        var dt = new Date();
+                        dt.setHours(0);
+                        dt.setMinutes(ss[0]);
+                        dt.setSeconds(ss[1]);
+                        var dt2 = new Date(dt.valueOf() - 1000);
+                        var temp = dt2.toTimeString().split(" ");
+                        var ts = temp[0].split(":");
+                        chessClock.html(ts[1]+":"+ts[2]);
+                        if(ts[1] === "00" && ts[2] === "00") {
+                            alert("Your timer ran out. You lose.");
+                            location.reload();
+                        }
+                        if(user1Name === $.cookie('user')) {
+                            var user1Time = $('#uChessClock').html();
+                            var user2Time = $('#eChessClock').html();
+    //                        var userTimes = '{\"user1Time\":\"' + user1Time + '\"},{\"user2Time\":\"' + user2Time + '\"}';
+                            sendTime($.cookie('user'), user1Time, user2Time);
+                        }
+                        else {
+                            var user1Time = $('#eChessClock').html();
+                            var user2Time = $('#uChessClock').html();
+    //                        var userTimes = '{\"user1Time\":\"' + user1Time + '\"},{\"user2Time\":\"' + user2Time + '\"}';
+                            sendTime($.cookie('user'), user1Time, user2Time);
+                        }
                         poll();
                     }
+                    else
+                        poll();
                 }
               }, dataType: "json"});
         }, 1000);
     }
-    else {
-        var url = 'api/gameOver.php';
-
-        setTimeout(function(){
-          $.ajax({ 
-              url: url, 
-              success: function(data){
-//                console.log(data);
-                if(data === true) {
-                    alert("The game is over.");
-                    location.reload();
-                }
-                else {
-                    poll();
-                }
-              }, dataType: "json"});
-        }, 1000);
-    }
-}
+//    else {
+//        var url = 'api/gameOver.php';
+//
+//        setTimeout(function(){
+//          $.ajax({ 
+//              url: url, 
+//              success: function(data){
+////                console.log(data);
+//                if(data === true) {
+//                    alert("The game is over.");
+//                    location.reload();
+//                }
+//                else {
+//                    var chessClock = $("#uChessClock");
+//                    var myTime = chessClock.html();
+//                    var ss = myTime.split(":");
+//                    var dt = new Date();
+//                    dt.setHours(0);
+//                    dt.setMinutes(ss[0]);
+//                    dt.setSeconds(ss[1]);
+//                    var dt2 = new Date(dt.valueOf() - 1000);
+//                    var temp = dt2.toTimeString().split(" ");
+//                    var ts = temp[0].split(":");
+//                    chessClock.html(ts[1]+":"+ts[2]);
+//                    if(user1Name === $.cookie('user')) {
+//                        var user1Time = $('#uChessClock').html();
+//                        var user2Time = $('#eChessClock').html();
+////                        var userTimes = '{\"user1Time\":\"' + user1Time + '\"},{\"user2Time\":\"' + user2Time + '\"}';
+//                        sendTime($.cookie('user'), user1Time, user2Time);
+//                    }
+//                    else {
+//                        var user1Time = $('#eChessClock').html();
+//                        var user2Time = $('#uChessClock').html();
+////                        var userTimes = '{\"user1Time\":\"' + user1Time + '\"},{\"user2Time\":\"' + user2Time + '\"}';
+//                        sendTime($.cookie('user'), user1Time, user2Time);
+//                    }
+//                    poll();
+//                }
+//              }, dataType: "json"});
+//        }, 1000);
+//    }
+//}
 
 function loadPieces(info) {
-    //alert(JSON.stringify(info));
+    //alert(JSON.stringify(info));   
     
     yPieces = [];
     oPieces = [];
@@ -709,7 +810,6 @@ function loadPieces(info) {
     oCapturedPieces = [];
     
     if(info.user1 === $.cookie('user')) {        
-        
         var myPieces = JSON.parse(info.user1Pieces);
         for(var i = 0; i < myPieces.length; i++) {
             yPieces.push(new Piece(myPieces[i].x, myPieces[i].y, myPieces[i].pieceType));
@@ -731,7 +831,7 @@ function loadPieces(info) {
         oPieces = invertPieceLocations(oPieces);
         
     }
-    else {        
+    else {     
         var myPieces = JSON.parse(info.user2Pieces);
         for(var i = 0; i < myPieces.length; i++) {
             yPieces.push(new Piece(myPieces[i].x, myPieces[i].y, myPieces[i].pieceType));
