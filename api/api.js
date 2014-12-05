@@ -206,3 +206,19 @@ function sendTime(username, user1Time, user2Time) {
         }
     });
 }
+
+function resetConnect(username) {
+    var url = "api/reset_connect.php";
+    var json = "username=" + username;
+
+    $.ajax({
+        type: 'GET',
+        url: url,
+        data: json,
+        async: false,
+        contentType: 'application/json',
+        error: function(jqXHR, textStatus, errorThrown) {
+            alert("Something went wrong\n" + textStatus + ": " + errorThrown);
+        }
+    });
+}
