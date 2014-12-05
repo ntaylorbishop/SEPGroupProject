@@ -1,6 +1,11 @@
 function loginBtn(username) {
-	login(username);
-	location.reload();
+	if(username === "") {
+		alert("Username cannot be empty.");
+	}
+	else {
+		login(username);
+		location.reload();
+	}
 }
 
 function logoutBtn(username) {
