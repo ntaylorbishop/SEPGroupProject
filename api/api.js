@@ -190,3 +190,19 @@ function forfeitGame(user1, user2) {
         }
     });
 }
+
+function sendTime(username, user1Time, user2Time) {
+    var url = "api/send_time.php";
+    var json = "username=" + username + "&user1Time=" + user1Time + "&user2Time=" + user2Time;
+
+    $.ajax({
+        type: 'GET',
+        url: url,
+        data: json,
+        async: false,
+        contentType: 'application/json',
+        error: function(jqXHR, textStatus, errorThrown) {
+            alert("Something went wrong\n" + textStatus + ": " + errorThrown);
+        }
+    });
+}
