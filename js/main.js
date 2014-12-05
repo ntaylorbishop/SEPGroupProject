@@ -1066,7 +1066,7 @@ function isKingReallyInCheckMate() {
         var actualPieceLocation = new Cell(yPieces[i].x, yPieces[i].y);
         var capturedPiece = null;
         for(var j = 0; j < validMoves.length; j++) {
-//            console.log("Move -- x: " + validMoves[j].x + ", y: " + validMoves[j].y);
+            console.log("Move -- x: " + validMoves[j].x + ", y: " + validMoves[j].y);
             yPieces[i].x = validMoves[j].x;
             yPieces[i].y = validMoves[j].y;
             
@@ -1085,7 +1085,8 @@ function isKingReallyInCheckMate() {
             //check for check-mate
             if(isKingInCheck()) {
                 if(!isKingInCheckMate()) {
-                    theKingIsReallyInCheckMate = true; 
+                    theKingIsReallyInCheckMate = false; 
+                    return theKingIsReallyInCheckMate;
                 }
                 
                 if(capturedPiece !== null) {
