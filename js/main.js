@@ -103,7 +103,7 @@ function clickOnEmptyCell(cell) {
     else if(piece.pieceType === 'N') 
         validMove = checkValidKnightMove(piece, cell);
 
-    alert(validMove);
+//    alert(validMove);
     if(validMove) {
         selectedPieceHasMoved = true;
         for(var i = 0; i < yPieces.length; i++) {
@@ -337,6 +337,8 @@ function isEnemyPieceAt(x, y) {
 }
 
 function checkValidPawnMove(piece, dest) {
+    if(piece.y === dest.y &&  piece.x === dest.x)
+        return false;
     if(piece.y === dest.y) 
         return false;
 
@@ -367,6 +369,8 @@ function checkValidPawnMove(piece, dest) {
 }
 
 function checkValidRookMove(piece, dest) {
+    if(piece.y === dest.y &&  piece.x === dest.x)
+        return false;
     if(piece.y !== dest.y && piece.x !== dest.x)
         return false;
 
@@ -409,6 +413,8 @@ function checkValidRookMove(piece, dest) {
 }
 
 function checkValidKnightMove(piece, dest) {
+    if(piece.y === dest.y &&  piece.x === dest.x)
+        return false;
     var xDiff = Math.abs(piece.x - dest.x);
     var yDiff = Math.abs(piece.y - dest.y);
 
@@ -421,6 +427,8 @@ function checkValidKnightMove(piece, dest) {
 }
 
 function checkValidBishopMove(piece, dest) {
+    if(piece.y === dest.y &&  piece.x === dest.x)
+        return false;
     var xDiff = Math.abs(dest.x - piece.x);
     var yDiff = Math.abs(dest.y - piece.y);
 
@@ -451,6 +459,8 @@ function checkValidBishopMove(piece, dest) {
 }
 
 function checkValidQueenMove(piece, dest) {
+    if(piece.y === dest.y &&  piece.x === dest.x)
+        return false;
     if(checkValidRookMove(piece, dest) || checkValidBishopMove(piece, dest)) {
         return true;
     }
@@ -458,6 +468,8 @@ function checkValidQueenMove(piece, dest) {
 }
 
 function checkValidKingMove(piece, dest) {
+    if(piece.y === dest.y &&  piece.x === dest.x)
+        return false;
 
     if((piece.y === dest.y || piece.y === (dest.y + 1) || piece.y === (dest.y - 1))
      && (piece.x === dest.x || piece.x === (dest.x + 1) || piece.x === (dest.x - 1))) {
@@ -523,7 +535,7 @@ function sendMove() {
     else kingInCheck = false;
     
     
-    console.log("Send Move");
+//    console.log("Send Move");
     selectedPieceHasMoved = false;
     selectedPieceIndex = -1;
     drawBoard();
@@ -617,12 +629,18 @@ function poll(){
                         $('#send').val("Send");
                         loadPieces(data);
                         if(isKingInCheck()) {
+                            console.log("King in check");
                             if(isKingInCheckMate()) {
-                                alert("Your king is in check-mate, You Lose.");
-                                location.reload();
+                                console.log("King in preliminary check-mate");
+                                if(isKingReallyInCheckMate()) {
+                                    alert("Your king is in check-mate, You Lose.");
+                                    location.reload();
+                                }
                             }
-                            alert("Your king is in check, make sure to move him.");
-                            kingInCheck = true;
+                            else {
+                                alert("Your king is in check, make sure to move him.");
+                                kingInCheck = true;
+                            }
                         }
                         else {
                             kingInCheck = false;
@@ -641,9 +659,13 @@ function poll(){
                         $('#send').val("Send");
                         loadPieces(data);
                         if(isKingInCheck()) {
+                            console.log("King in check");
                             if(isKingInCheckMate()) {
-                                alert("Your king is in check-mate, You Lose.");
-                                location.reload();
+                                console.log("King in preliminary check-mate");
+                                if(isKingReallyInCheckMate()) {
+                                    alert("Your king is in check-mate, You Lose.");
+                                    location.reload();
+                                }
                             }
                             alert("Your king is in check, make sure to move him.");
                             kingInCheck = true;
@@ -654,9 +676,6 @@ function poll(){
                     else {
                         poll();
                     }
-                }
-                else {
-                    poll();
                 }
               }, dataType: "json"});
         }, 1000);
@@ -812,7 +831,7 @@ function isKingInCheckMate() {
 
 function inCheck(dest) {
 //    alert('King\'s Location: ' + JSON.stringify(dest));
-    
+//    console.log('--------------------------------------------------');
     var destInverted = invertPiece(new Cell(dest.x, dest.y));
     oPieces = invertPieceLocations(oPieces);
     yPieces = invertPieceLocations(yPieces);
@@ -821,9 +840,9 @@ function inCheck(dest) {
 //    oPiecesInverted = invertPieceLocations(oPiecesInverted);
     
     for(var i = 0; i < oPieces.length; i++) {
-//        console.log('Piece location: ' + JSON.stringify(oPiecesInverted[i]));
+//        console.log('Piece location: ' + JSON.stringify(oPieces[i]));
         if(oPieces[i].pieceType === 'P') {
-//            console.log("Valid pawn move: " + checkValidPawnMove(oPiecesInverted[i], destInverted));
+//            console.log("Valid pawn move: " + checkValidPawnMove(oPieces[i], destInverted));
             if(checkValidPawnMove(oPieces[i], destInverted)) { 
                 oPieces = invertPieceLocations(oPieces);
                 yPieces = invertPieceLocations(yPieces);
@@ -831,7 +850,7 @@ function inCheck(dest) {
             }
         }
         else if(oPieces[i].pieceType === 'R') {
-//            console.log("Valid rook move: " + checkValidRookMove(oPiecesInverted[i], destInverted));
+//            console.log("Valid rook move: " + checkValidRookMove(oPieces[i], destInverted));
             if(checkValidRookMove(oPieces[i], destInverted)) {
                 oPieces = invertPieceLocations(oPieces);
                 yPieces = invertPieceLocations(yPieces);
@@ -839,7 +858,7 @@ function inCheck(dest) {
             }
         }
         else if(oPieces[i].pieceType === 'B') {
-//            console.log("Valid bishop move: " + checkValidBishopMove(oPiecesInverted[i], destInverted));
+//            console.log("Valid bishop move: " + checkValidBishopMove(oPieces[i], destInverted));
             if(checkValidBishopMove(oPieces[i], destInverted)) {
                 oPieces = invertPieceLocations(oPieces);
                 yPieces = invertPieceLocations(yPieces);
@@ -847,7 +866,7 @@ function inCheck(dest) {
             }
         }
         else if(oPieces[i].pieceType === 'N') {
-//            console.log("Valid kngiht move: " + checkValidKnightMove(oPiecesInverted[i], destInverted));
+//            console.log("Valid kngiht move: " + checkValidKnightMove(oPieces[i], destInverted));
             if(checkValidKnightMove(oPieces[i], destInverted)) {
                 oPieces = invertPieceLocations(oPieces);
                 yPieces = invertPieceLocations(yPieces);
@@ -855,7 +874,7 @@ function inCheck(dest) {
             }
         }
         else if(oPieces[i].pieceType === 'K') {
-//            console.log("Valid king move: " + checkValidKingMove(oPiecesInverted[i], destInverted));
+//            console.log("Valid king move: " + checkValidKingMove(oPieces[i], destInverted));
             if(checkValidKingMove(oPieces[i], destInverted)) {
                 oPieces = invertPieceLocations(oPieces);
                 yPieces = invertPieceLocations(yPieces);
@@ -863,9 +882,9 @@ function inCheck(dest) {
             }
         }
         else if(oPieces[i].pieceType === 'Q') {
-            console.log('Your King\'s location: ' + JSON.stringify(destInverted));
-            console.log('Opponent\'s Queen location: ' + JSON.stringify(oPieces[i]));
-            console.log("Valid queen move: " + checkValidQueenMove(oPieces[i], destInverted));
+//            console.log('Your King\'s location: ' + JSON.stringify(destInverted));
+//            console.log('Opponent\'s Queen location: ' + JSON.stringify(oPieces[i]));
+//            console.log("Valid queen move: " + checkValidQueenMove(oPieces[i], destInverted));
             if(checkValidQueenMove(oPieces[i], destInverted)) {
                 oPieces = invertPieceLocations(oPieces);
                 yPieces = invertPieceLocations(yPieces);
@@ -876,4 +895,89 @@ function inCheck(dest) {
     oPieces = invertPieceLocations(oPieces);
     yPieces = invertPieceLocations(yPieces);
     return false;    
+}
+
+function isKingReallyInCheckMate() {
+    var theKingIsReallyInCheckMate = true;
+    
+    
+    for(var i = 0; i < yPieces.length; i++) {
+//        console.log("Piece " + i + ", type: " + yPieces[i].pieceType);
+        var validMoves = [];
+        
+        //find all valid moves for this piece
+        for(var x = 0; x < kBoardWidth; x++) {
+            for(var y = 0; y < kBoardHeight; y++) {
+//                console.log("x: " + x + ", y: " + y);
+                var temp = new Cell(x, y);
+                
+                if(yPieces[i].pieceType === 'P') {
+                    if(checkValidPawnMove(yPieces[i], temp)) {
+                        validMoves.push(temp); 
+                    }
+                }
+                else if(yPieces[i].pieceType === 'R') {
+                    if(checkValidRookMove(yPieces[i], temp)) {
+                        validMoves.push(temp); 
+                    }
+                }
+                else if(yPieces[i].pieceType === 'N') {
+                    if(checkValidKnightMove(yPieces[i], temp)) {
+                        validMoves.push(temp); 
+                    }
+                }
+                else if(yPieces[i].pieceType === 'B') {
+                    if(checkValidBishopMove(yPieces[i], temp)) {
+                        validMoves.push(temp); 
+                    }
+                }
+                else if(yPieces[i].pieceType === 'Q') {
+                    if(checkValidQueenMove(yPieces[i], temp)) {
+                        validMoves.push(temp); 
+                    }
+                }
+                else if(yPieces[i].pieceType === 'K') {
+                    if(checkValidKingMove(yPieces[i], temp)) {
+                        validMoves.push(temp); 
+                    }
+                }
+            }
+        }
+        
+        var actualPieceLocation = new Cell(yPieces[i].x, yPieces[i].y);
+        var capturedPiece = null;
+        for(var j = 0; j < validMoves.length; j++) {
+//            console.log("Move -- x: " + validMoves[j].x + ", y: " + validMoves[j].y);
+            yPieces[i].x = validMoves[j].x;
+            yPieces[i].y = validMoves[j].y;
+            
+            //"capture" piece if it's at that location
+            if(isEnemyPieceAt(validMoves[j].x, validMoves[j].y)) {
+                var enemyPieceIndex = -1;
+                for(var k = 0; k < oPieces.length; k++) {
+                    if(oPieces[k].x === validMoves[j].x && oPieces[k].y === validMoves[j].y) {
+                        enemyPieceIndex = k;
+                        capturedPiece = new Piece(oPieces[k].x, oPieces[k].y, oPieces[k].pieceType);
+                    }
+                }
+                oPieces.splice(enemyPieceIndex, 1); 
+            }
+            
+            //check for check-mate
+            if(isKingInCheck()) {
+                if(!isKingInCheckMate()) {
+                    theKingIsReallyInCheckMate = true; 
+                }
+                
+                if(capturedPiece !== null) {
+                    oPieces.push(new Piece(capturedPiece.x, capturedPiece.y, capturedPiece.pieceType));
+                    capturedPiece = null;
+                }
+                yPieces[i].x = actualPieceLocation.x;
+                yPieces[i].y = actualPieceLocation.y;
+            }
+        }
+        actualPieceLocation = null;
+    }
+    return theKingIsReallyInCheckMate;
 }
