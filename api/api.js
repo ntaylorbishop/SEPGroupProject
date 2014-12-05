@@ -9,12 +9,12 @@ var json = '{"username":"' + username + '"}';
         async: false,
         contentType: 'application/json',
         success: function(result, status, xhr) {
-            $.cookie('user', username, { expires: 1, path: '/' });
             if(result.error === false) {
+                $.cookie('user', username, { expires: 1, path: '/' });
                 return true;
             }
             else {
-                alert(JSON.stringify(result));
+                alert("\tUser already logged in with that name.\t\n\tPlease try another name.\t");
                 return false;
             }
         },
