@@ -1085,8 +1085,7 @@ function isKingReallyInCheckMate() {
             //check for check-mate
             if(isKingInCheck()) {
                 if(!isKingInCheckMate()) {
-                    theKingIsReallyInCheckMate = false; 
-                    return theKingIsReallyInCheckMate;
+                    theKingIsReallyInCheckMate = true; 
                 }
                 
                 if(capturedPiece !== null) {
