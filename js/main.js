@@ -577,12 +577,18 @@ function sendMove() {
     }
     var userTime = '\"userTime\": [{\"user1Time\":\"' + user1Time + '\"},{\"user2Time\":\"' + user2Time + '\"}]';    
     myturn = false;
-    send(user1Name, user2Name, user1Pieces, user2Pieces, user1CapturedPieces, user2CapturedPieces, userTime);
+    
     clearTimeout(timer);
     sleeping = setTimeout(function () {
         receiveData();
         clearTimeout(sleeping);
     }, 3000);
+    
+    send(user1Name, user2Name, user1Pieces, user2Pieces, user1CapturedPieces, user2CapturedPieces, userTime);
+    
+    //receive poll
+    
+
     
     $('#reset').prop("disabled", true);
     $('#send').prop("disabled", true);
