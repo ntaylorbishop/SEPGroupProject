@@ -526,9 +526,8 @@ function sendMove() {
 
     clearInterval(timer);
     isAsleep = true;
-    sleeping = setInterval(function () {
+    sleeping = setTimeout(function () {
         receiveData();
-        clearInterval(sleeping);
         isAsleep = false;
     }, 5000);
     
