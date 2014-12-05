@@ -522,6 +522,13 @@ function resetBadMove(previousPieces) {
 }
 
 function sendMove() {
+        
+    clearTimeout(timer);
+    sleeping = setTimeout(function () {
+        receiveData();
+        clearTimeout(sleeping);
+    }, 3000);
+    
     var currentPieceLocations = [];
     for(var i = 0; i < yPieces.length; i++) 
         currentPieceLocations.push(new Piece(yPieces[i].x, yPieces[i].y, yPieces[i].pieceType));
@@ -578,11 +585,7 @@ function sendMove() {
     var userTime = '\"userTime\": [{\"user1Time\":\"' + user1Time + '\"},{\"user2Time\":\"' + user2Time + '\"}]';    
     myturn = false;
     
-    clearTimeout(timer);
-    sleeping = setTimeout(function () {
-        receiveData();
-        clearTimeout(sleeping);
-    }, 3000);
+
     
     send(user1Name, user2Name, user1Pieces, user2Pieces, user1CapturedPieces, user2CapturedPieces, userTime);
     
