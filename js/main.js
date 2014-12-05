@@ -582,7 +582,7 @@ function sendMove() {
     sleeping = setTimeout(function () {
         receiveData();
         clearTimeout(sleeping);
-    }, 1000);
+    }, 3000);
     
     $('#reset').prop("disabled", true);
     $('#send').prop("disabled", true);
