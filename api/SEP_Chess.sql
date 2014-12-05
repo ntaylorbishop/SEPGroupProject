@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Dec 01, 2014 at 01:19 AM
+-- Generation Time: Dec 04, 2014 at 10:34 PM
 -- Server version: 5.5.38-0ubuntu0.12.04.1
 -- PHP Version: 5.5.16-1+deb.sury.org~precise+1
 
@@ -27,7 +27,7 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE IF NOT EXISTS `Users` (
-  `username` text NOT NULL,
+  `username` varchar(50) NOT NULL,
   `inGame` tinyint(1) NOT NULL DEFAULT '0',
   `waitingToConnect` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -45,11 +45,21 @@ CREATE TABLE IF NOT EXISTS `Whos_Playing` (
   `user2Pieces` text NOT NULL,
   `user1CapturedPieces` text NOT NULL,
   `user2CapturedPieces` text NOT NULL,
-  `user1Time` time NOT NULL,
-  `user2Time` time NOT NULL,
+  `user1Time` varchar(6) NOT NULL,
+  `user2Time` varchar(6) NOT NULL,
   `whosTurn` tinyint(4) NOT NULL,
   `clockEnabled` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `Users`
+--
+ALTER TABLE `Users`
+ ADD PRIMARY KEY (`username`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
