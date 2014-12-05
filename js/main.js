@@ -14,6 +14,7 @@ var gPattern;
 var myturn;
 var sleeping;
 var timer;
+var isAsleep = false;
 
 var user1Name;
 var user2Name;
@@ -522,11 +523,13 @@ function resetBadMove(previousPieces) {
 }
 
 function sendMove() {
-        
+
     clearInterval(timer);
+    isAsleep = true;
     sleeping = setInterval(function () {
         receiveData();
         clearInterval(sleeping);
+        isAsleep = false;
     }, 5000);
     
     var currentPieceLocations = [];
@@ -588,7 +591,7 @@ function sendMove() {
 
     
     send(user1Name, user2Name, user1Pieces, user2Pieces, user1CapturedPieces, user2CapturedPieces, userTime);
-    
+
     //receive poll
     
 
@@ -655,12 +658,13 @@ function poll(){
                 if(data.user1 === $.cookie('user')) {
                     $('#uChessClock').html(data.user1Time);
                     $('#eChessClock').html(data.user2Time);
-                    if(data.whosTurn === '0' && !myturn) {
+                    if(data.whosTurn === '0' && !myturn && !isAsleep) {
                         myturn = true;
                         $('#reset').prop("disabled", false);
                         $('#send').prop("disabled", false);
                         $('#reset').val("Reset");
                         $('#send').val("Send");
+                        
                         loadPieces(data);
                         if(isKingInCheck()) {
                             console.log("King in check");
@@ -681,7 +685,7 @@ function poll(){
                         }
                         //poll();
                     }
-                    else if(data.whosTurn === '0' && myturn) {
+                    else if(data.whosTurn === '0' && myturn && !isAsleep) {
                         var chessClock = $("#uChessClock");
                         var myTime = chessClock.html();
                         var ss = myTime.split(":");
@@ -714,7 +718,7 @@ function poll(){
                     //else 
                         //poll();
                 }
-                else if(data.user2 === $.cookie('user')) {
+                else if(data.user2 === $.cookie('user') && !isAsleep) {
                     $('#uChessClock').html(data.user2Time);
                     $('#eChessClock').html(data.user1Time);
                     if(data.whosTurn === '1' && !myturn) {
@@ -741,7 +745,7 @@ function poll(){
                         }
                         //poll();
                     }
-                    else if(data.whosTurn === '1' && myturn) {
+                    else if(data.whosTurn === '1' && myturn && !isAsleep) {
                         var chessClock = $("#uChessClock");
                         var myTime = chessClock.html();
                         var ss = myTime.split(":");
