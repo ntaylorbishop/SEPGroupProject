@@ -722,7 +722,7 @@ function poll(){
                         }
                         poll();
                     }
-                    if(data.whosTurn === '1' && myturn) {
+                    else if(data.whosTurn === '1' && myturn) {
                         var chessClock = $("#uChessClock");
                         var myTime = chessClock.html();
                         var ss = myTime.split(":");
